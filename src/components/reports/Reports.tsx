@@ -195,6 +195,38 @@ export default function Reports() {
 		}
 	};
 
+	function getTypeStyle(type: string) {
+		const styles = {
+			"LinkedIn Post": {
+				background: "rgb(59 130 246 / 0.1)", // blue-500/10
+				text: "rgb(59 130 246)", // blue-500
+				border: "rgb(37 99 235)", // blue-600
+			},
+			"LinkedIn Message": {
+				background: "rgb(16 185 129 / 0.1)", // green-500/10
+				text: "rgb(16 185 129)", // green-500
+				border: "rgb(5 150 105)", // green-600
+			},
+			Email: {
+				background: "rgb(139 92 246 / 0.1)", // purple-500/10
+				text: "rgb(139 92 246)", // purple-500
+				border: "rgb(124 58 237)", // purple-600
+			},
+			"Phone Call": {
+				background: "rgb(236 72 153 / 0.1)", // pink-500/10
+				text: "rgb(236 72 153)", // pink-500
+				border: "rgb(219 39 119)", // pink-600
+			},
+			default: {
+				background: "rgb(107 114 128 / 0.1)", // gray-500/10
+				text: "rgb(107 114 128)", // gray-500
+				border: "rgb(75 85 99)", // gray-600
+			},
+		};
+
+		return styles[type] || styles.default;
+	}
+
 	return (
 		<div className="space-y-8">
 			{/* Enhanced Header with Gradient Background */}
@@ -453,24 +485,48 @@ export default function Reports() {
 										(a, b) =>
 											new Date(b.date).getTime() - new Date(a.date).getTime()
 									)
-									.map((comm) => (
-										<tr key={comm.id}>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{format(new Date(comm.date), "PPP")}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{companies.find((c) => c.id === comm.companyId)?.name}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap">
-												<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-													{comm.type}
-												</span>
-											</td>
-											<td className="px-6 py-4 text-sm text-gray-500 max-w-md truncate">
-												{comm.notes}
-											</td>
-										</tr>
-									))}
+									.map((comm) => {
+										const company = companies.find(
+											(c) => c.id === comm.companyId
+										);
+										const typeStyle = getTypeStyle(comm.type);
+
+										return (
+											<motion.tr
+												key={comm.id}
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												className="hover:bg-gray-50 transition-colors"
+											>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+													{format(new Date(comm.date), "MMMM do, yyyy")}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap">
+													<div className="text-sm font-medium text-gray-900">
+														{company?.name}
+													</div>
+													<div className="text-sm text-gray-500">
+														{company?.location}
+													</div>
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap">
+													<span
+														className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+														style={{
+															backgroundColor: typeStyle.background,
+															color: typeStyle.text,
+															border: `1px solid ${typeStyle.border}`,
+														}}
+													>
+														{comm.type}
+													</span>
+												</td>
+												<td className="px-6 py-4 text-sm text-gray-500">
+													{comm.notes}
+												</td>
+											</motion.tr>
+										);
+									})}
 							</tbody>
 						</table>
 					</div>

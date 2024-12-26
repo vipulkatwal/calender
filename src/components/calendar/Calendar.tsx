@@ -74,7 +74,7 @@ export default function Calendar() {
 				},
 			};
 		}),
-		// Upcoming communications
+		// Upcoming/Due communications
 		...companies
 			.map((company) => {
 				const lastComm = communications
@@ -88,17 +88,17 @@ export default function Calendar() {
 						new Date(lastComm.date),
 						company.communicationPeriodicity
 					);
-					const colors = getEventColor("Due");
 					return {
 						id: `upcoming-${company.id}`,
 						title: `${company.name} - Due`,
 						start: nextDate,
-						backgroundColor: colors.background,
-						borderColor: colors.border,
-						textColor: colors.text,
+						backgroundColor: "#FEF3C7", // amber-100
+						borderColor: "#F59E0B", // amber-500
+						textColor: "#92400E", // amber-800
 						extendedProps: {
 							isUpcoming: true,
 							companyId: company.id,
+							type: "Due",
 						},
 					};
 				}
@@ -205,7 +205,15 @@ export default function Calendar() {
 						eventContent={(eventInfo) => (
 							<motion.div
 								whileHover={{ scale: 1.02 }}
-								className="w-full px-2 py-1.5"
+								className="w-full h-full"
+								style={{
+									backgroundColor: eventInfo.backgroundColor,
+									borderColor: eventInfo.borderColor,
+									color: eventInfo.textColor,
+									padding: "0.25rem 0.5rem",
+									borderRadius: "0.375rem",
+									boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+								}}
 								title={
 									eventInfo.event.extendedProps.notes || "Click to schedule"
 								}
@@ -215,6 +223,7 @@ export default function Calendar() {
 								</div>
 							</motion.div>
 						)}
+						eventClassNames="!border-0 !bg-transparent !p-1"
 					/>
 				</div>
 			</div>
