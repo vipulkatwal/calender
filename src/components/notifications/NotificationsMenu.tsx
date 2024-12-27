@@ -41,20 +41,20 @@ export default function NotificationsMenu() {
 		switch (type) {
 			case "overdue":
 				return (
-					<div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-						<ExclamationCircleIcon className="h-5 w-5 text-red-600" />
+					<div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-red-100 to-red-50 flex items-center justify-center shadow-sm">
+						<ExclamationCircleIcon className="h-6 w-6 text-red-500" />
 					</div>
 				);
 			case "due":
 				return (
-					<div className="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-						<ClockIcon className="h-5 w-5 text-amber-600" />
+					<div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center shadow-sm">
+						<ClockIcon className="h-6 w-6 text-amber-500" />
 					</div>
 				);
 			default:
 				return (
-					<div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-						<BellIcon className="h-5 w-5 text-blue-600" />
+					<div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center shadow-sm">
+						<BellIcon className="h-6 w-6 text-blue-500" />
 					</div>
 				);
 		}
@@ -62,21 +62,23 @@ export default function NotificationsMenu() {
 
 	return (
 		<div className="relative">
-			{/* Notification bell button - responsive sizing */}
+			{/* Bell button with new animation */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
-				className="relative rounded-full p-2 text-gray-700 hover:bg-gray-200 transition-all duration-200"
+				className="relative rounded-full p-2.5 text-gray-700 hover:bg-gray-100/80 hover:text-primary-600 transition-all duration-200"
 			>
-				{unreadCount > 0 ? (
-					<BellAlertIcon className="h-6 w-6" />
-				) : (
-					<BellIcon className="h-6 w-6" />
-				)}
+				<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+					{unreadCount > 0 ? (
+						<BellAlertIcon className="h-6 w-6" />
+					) : (
+						<BellIcon className="h-6 w-6" />
+					)}
+				</motion.div>
 				{unreadCount > 0 && (
 					<motion.span
 						initial={{ scale: 0 }}
 						animate={{ scale: 1 }}
-						className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full"
+						className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full ring-2 ring-white"
 					>
 						{unreadCount}
 					</motion.span>
@@ -86,37 +88,41 @@ export default function NotificationsMenu() {
 			<AnimatePresence>
 				{isOpen && (
 					<>
-						{/* Backdrop - covers entire screen */}
 						<div
-							className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+							className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]"
 							onClick={() => setIsOpen(false)}
 						/>
 
-						{/* Notifications panel - responsive width and positioning */}
 						<motion.div
 							initial={{ opacity: 0, scale: 0.95, y: -20 }}
 							animate={{ opacity: 1, scale: 1, y: 0 }}
 							exit={{ opacity: 0, scale: 0.95, y: -20 }}
 							transition={{ duration: 0.2 }}
-							className="absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-96 origin-top-right z-50"
+							className="fixed sm:absolute right-2 left-2 sm:left-auto sm:right-0 top-20 sm:top-auto sm:mt-3 sm:w-[420px] origin-top z-[70]"
 						>
-							<div className="rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 overflow-hidden">
-								{/* Header section with responsive padding */}
-								<div className="p-3 sm:p-4 bg-gradient-to-r from-blue-500 to-blue-600">
+							<div className="rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden">
+								{/* Modern header design */}
+								<div className="relative px-4 py-5 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 bg-[size:200%] animate-gradient">
 									<div className="flex items-center justify-between">
-										<h2 className="text-lg font-semibold text-white">
-											Notifications
-										</h2>
-										<div className="flex items-center space-x-2">
+										<div>
+											<h2 className="text-xl font-semibold text-white">
+												Notifications
+											</h2>
+											<p className="text-sm text-primary-100 mt-0.5">
+												{notifications.length} notification
+												{notifications.length !== 1 ? "s" : ""}
+											</p>
+										</div>
+										<div className="flex items-center gap-3">
 											<button
 												onClick={handleMarkAllAsRead}
-												className="text-sm text-blue-100 hover:text-white transition-colors"
+												className="text-sm px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
 											>
-												Mark all as read
+												Mark all read
 											</button>
 											<button
 												onClick={handleClearAll}
-												className="text-sm text-blue-100 hover:text-white transition-colors"
+												className="text-sm px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
 											>
 												Clear all
 											</button>
@@ -124,13 +130,18 @@ export default function NotificationsMenu() {
 									</div>
 								</div>
 
-								{/* Notifications list with responsive height and padding */}
-								<div className="divide-y divide-gray-100 max-h-[60vh] sm:max-h-[calc(100vh-200px)] overflow-y-auto">
+								{/* Enhanced notifications list */}
+								<div className="divide-y divide-gray-100 max-h-[calc(100vh-10rem)] overflow-y-auto">
 									{notifications.length === 0 ? (
-										<div className="p-8 text-center">
-											<BellIcon className="mx-auto h-12 w-12 text-gray-400" />
-											<p className="mt-2 text-sm text-gray-500">
+										<div className="p-12 text-center">
+											<div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-4">
+												<BellIcon className="h-8 w-8 text-gray-400" />
+											</div>
+											<p className="text-gray-500 font-medium">
 												No notifications yet
+											</p>
+											<p className="text-sm text-gray-400 mt-1">
+												We'll notify you when something arrives
 											</p>
 										</div>
 									) : (
@@ -141,16 +152,16 @@ export default function NotificationsMenu() {
 												initial={{ opacity: 0 }}
 												animate={{ opacity: 1 }}
 												exit={{ opacity: 0 }}
-												className={`p-4 hover:bg-gray-50 transition-colors ${
+												className={`p-4 hover:bg-gray-50/80 transition-all duration-200 ${
 													!notification.isRead ? "bg-blue-50/50" : ""
 												}`}
 											>
-												<div className="flex items-start space-x-4">
+												<div className="flex gap-4">
 													{getNotificationIcon(notification.type)}
 													<div className="flex-1 min-w-0">
-														<div className="flex items-center justify-between">
+														<div className="flex items-start justify-between gap-4">
 															<p
-																className={`text-sm font-medium ${
+																className={`font-medium ${
 																	!notification.isRead
 																		? "text-gray-900"
 																		: "text-gray-600"
@@ -158,7 +169,7 @@ export default function NotificationsMenu() {
 															>
 																{notification.title}
 															</p>
-															<span className="text-xs text-gray-500">
+															<span className="text-xs text-gray-400 whitespace-nowrap">
 																{format(
 																	new Date(notification.createdAt),
 																	"MMM d, HH:mm"
@@ -173,7 +184,7 @@ export default function NotificationsMenu() {
 																onClick={() =>
 																	dispatch(markAsRead(notification.id))
 																}
-																className="mt-2 flex items-center text-xs text-blue-600 hover:text-blue-700"
+																className="mt-2 flex items-center text-xs font-medium text-primary-600 hover:text-primary-700"
 															>
 																<CheckCircleIcon className="h-4 w-4 mr-1" />
 																Mark as read
