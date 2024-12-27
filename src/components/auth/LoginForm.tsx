@@ -66,8 +66,8 @@ export default function LoginForm() {
 								stiffness: 260,
 								damping: 20,
 							}}
-							className="mx-auto h-12 w-auto"
-							src="/logo.svg"
+							className="mx-auto h-20 w-auto"
+							src="/logo.png"
 							alt="Logo"
 						/>
 						<motion.h2

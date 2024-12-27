@@ -62,8 +62,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 						<div className="flex">
 							<div className="flex flex-shrink-0 items-center">
 								<img
-									className="h-8 w-auto brightness-0 invert"
-									src="/logo.svg"
+									className="h-16 w-auto"
+									src="/logo.png"
 									alt="Company logo"
 								/>
 							</div>
