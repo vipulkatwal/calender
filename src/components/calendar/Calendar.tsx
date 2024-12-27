@@ -8,17 +8,11 @@ import { format, addDays } from "date-fns";
 import CommunicationModal from "../communications/CommunicationModal";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import {
-	ChevronLeftIcon,
-	ChevronRightIcon,
-	CalendarDaysIcon,
-} from "@heroicons/react/24/outline";
 
 export default function Calendar() {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 	const [showCommunicationModal, setShowCommunicationModal] = useState(false);
-	const [currentDate, setCurrentDate] = useState(new Date());
 
 	const communications = useSelector(
 		(state: RootState) => state.communications.communications
@@ -133,122 +127,105 @@ export default function Calendar() {
 		}
 	};
 
-	const customHeaderContent = {
-		left: "title",
-		center: "",
-		right: "prev,today,next",
-	};
-
-	const headerToolbar = {
-		start: "",
-		center: "",
-		end: "",
-	};
-
 	return (
-		<div className="space-y-6">
-			{/* Custom Calendar Header */}
-			<div className="flex items-center justify-between bg-white rounded-xl shadow-sm p-4">
-				<div className="flex items-center gap-3">
-					<CalendarDaysIcon className="h-8 w-8 text-primary-600" />
-					<div>
-						<h2 className="text-2xl font-bold text-gray-900">
-							{format(currentDate, "MMMM yyyy")}
-						</h2>
-						<p className="text-sm text-gray-500">
+		<div className="space-y-8">
+			<div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl p-8 shadow-xl">
+				<div className="sm:flex sm:items-center sm:justify-between">
+					<div className="text-white">
+						<h1 className="text-2xl font-semibold">Calendar</h1>
+						<p className="mt-2 text-primary-100">
 							View and manage communications schedule
 						</p>
 					</div>
-				</div>
-
-				<div className="flex items-center gap-2">
-					<div className="flex items-center bg-gray-100 rounded-lg p-1">
+					<div className="mt-4 sm:mt-0 flex items-center gap-4">
 						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							className="p-2 rounded-md hover:bg-white hover:shadow-sm transition-all duration-200"
-							onClick={() => {
-								const calendarApi = document.querySelector(".fc")?.getApi();
-								calendarApi?.prev();
-								setCurrentDate(calendarApi?.getDate() || new Date());
-							}}
+							whileHover={{ scale: 1.02 }}
+							whileTap={{ scale: 0.98 }}
+							onClick={() => setShowCommunicationModal(true)}
+							className="bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20
+									 hover:bg-white/20 transition-all duration-200 flex items-center gap-2"
 						>
-							<ChevronLeftIcon className="h-5 w-5 text-gray-600" />
-						</motion.button>
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-white hover:shadow-sm transition-all duration-200"
-							onClick={() => {
-								const calendarApi = document.querySelector(".fc")?.getApi();
-								calendarApi?.today();
-								setCurrentDate(calendarApi?.getDate() || new Date());
-							}}
-						>
-							Today
-						</motion.button>
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							className="p-2 rounded-md hover:bg-white hover:shadow-sm transition-all duration-200"
-							onClick={() => {
-								const calendarApi = document.querySelector(".fc")?.getApi();
-								calendarApi?.next();
-								setCurrentDate(calendarApi?.getDate() || new Date());
-							}}
-						>
-							<ChevronRightIcon className="h-5 w-5 text-gray-600" />
+							<svg
+								className="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+								/>
+							</svg>
+							Schedule Communication
 						</motion.button>
 					</div>
 				</div>
+
+				<div className="mt-8 flex flex-wrap gap-6">
+					{[
+						{ label: "LinkedIn Post", color: "bg-blue-500" },
+						{ label: "LinkedIn Message", color: "bg-green-500" },
+						{ label: "Email", color: "bg-purple-500" },
+						{ label: "Phone Call", color: "bg-pink-500" },
+						{ label: "Due", color: "bg-amber-500" },
+					].map(({ label, color }) => (
+						<div key={label} className="flex items-center gap-2">
+							<span
+								className={`w-3 h-3 rounded-full ${color} ring-2 ring-offset-2 ring-offset-primary-700 ${color.replace(
+									"bg",
+									"ring"
+								)}/30`}
+							/>
+							<span className="text-sm font-medium text-white/90">{label}</span>
+						</div>
+					))}
+				</div>
 			</div>
 
-			{/* Calendar Component */}
-			<div className="bg-white rounded-xl shadow-sm p-4">
-				<FullCalendar
-					plugins={[dayGridPlugin, interactionPlugin]}
-					initialView="dayGridMonth"
-					headerToolbar={headerToolbar}
-					customButtons={{
-						prev: {
-							text: "",
-						},
-						next: {
-							text: "",
-						},
-						today: {
-							text: "",
-						},
-					}}
-					dayMaxEvents={3}
-					events={events}
-					eventClick={handleEventClick}
-					dateClick={(info) => {
-						setSelectedDate(new Date(info.dateStr));
-						setSelectedCompanies([]);
-						setShowCommunicationModal(true);
-					}}
-					eventContent={(eventInfo) => (
-						<motion.div
-							whileHover={{ scale: 1.02 }}
-							className="w-full h-full"
-							style={{
-								backgroundColor: eventInfo.backgroundColor,
-								borderColor: eventInfo.borderColor,
-								color: eventInfo.textColor,
-								padding: "0.25rem 0.5rem",
-								borderRadius: "0.375rem",
-								boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-							}}
-							title={eventInfo.event.extendedProps.notes || "Click to schedule"}
-						>
-							<div className="text-xs font-medium truncate">
-								{eventInfo.event.title}
-							</div>
-						</motion.div>
-					)}
-					eventClassNames="!border-0 !bg-transparent !p-1"
-				/>
+			<div className="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+				<div className="p-6">
+					<FullCalendar
+						plugins={[dayGridPlugin, interactionPlugin]}
+						initialView="dayGridMonth"
+						events={events}
+						headerToolbar={{
+							left: "prev,next today",
+							center: "title",
+							right: "",
+						}}
+						height="800px"
+						eventClick={handleEventClick}
+						dateClick={(info) => {
+							setSelectedDate(new Date(info.dateStr));
+							setSelectedCompanies([]);
+							setShowCommunicationModal(true);
+						}}
+						eventContent={(eventInfo) => (
+							<motion.div
+								whileHover={{ scale: 1.02 }}
+								className="w-full h-full"
+								style={{
+									backgroundColor: eventInfo.backgroundColor,
+									borderColor: eventInfo.borderColor,
+									color: eventInfo.textColor,
+									padding: "0.25rem 0.5rem",
+									borderRadius: "0.375rem",
+									boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+								}}
+								title={
+									eventInfo.event.extendedProps.notes || "Click to schedule"
+								}
+							>
+								<div className="text-xs font-medium truncate">
+									{eventInfo.event.title}
+								</div>
+							</motion.div>
+						)}
+						eventClassNames="!border-0 !bg-transparent !p-1"
+					/>
+				</div>
 			</div>
 
 			<CommunicationModal
