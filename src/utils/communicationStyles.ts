@@ -37,5 +37,5 @@ export function getEventColor(type: CommunicationType) {
 		},
 	};
 
-	return colors[type] || colors.Other;
+	return colors[type] || colors.default;
 }

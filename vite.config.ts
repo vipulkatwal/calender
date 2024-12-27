@@ -9,4 +9,15 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					vendor: ["react", "react-dom"],
+					charts: ["chart.js", "react-chartjs-2"],
+					calendar: ["@fullcalendar/core", "@fullcalendar/react"],
+				},
+			},
+		},
+	},
 });

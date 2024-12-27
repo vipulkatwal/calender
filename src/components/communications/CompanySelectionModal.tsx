@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Company } from "../../types";
 
 interface CompanySelectionModalProps {
