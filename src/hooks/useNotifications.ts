@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { syncNotifications } from "../store/slices/notificationsSlice";
 import { format, isToday, isBefore } from "date-fns";
+import { Notification } from "../types";
 
 export function useNotifications() {
 	const dispatch = useDispatch();
@@ -34,7 +35,7 @@ export function useNotifications() {
 	};
 
 	useEffect(() => {
-		const newNotifications = [];
+		const newNotifications: Notification[] = [];
 
 		companies.forEach((company) => {
 			const nextDate = getNextCommunicationDate(company.id);

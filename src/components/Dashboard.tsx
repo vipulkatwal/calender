@@ -1,11 +1,10 @@
 import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { useCommunications } from "../hooks/useCommunications";
 import CommunicationModal from "./communications/CommunicationModal";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Dashboard() {
@@ -65,35 +64,38 @@ export default function Dashboard() {
 	};
 
 	function getEventColor(type: string) {
-		const colors = {
+		const colors: Record<
+			string,
+			{ background: string; border: string; text: string }
+		> = {
 			"LinkedIn Post": {
-				background: "rgb(59 130 246 / 0.8)", // blue-500
-				border: "rgb(37 99 235)", // blue-600
+				background: "rgb(59 130 246 / 0.8)",
+				border: "rgb(37 99 235)",
 				text: "white",
 			},
 			"LinkedIn Message": {
-				background: "rgb(16 185 129 / 0.8)", // green-500
-				border: "rgb(5 150 105)", // green-600
+				background: "rgb(16 185 129 / 0.8)",
+				border: "rgb(5 150 105)",
 				text: "white",
 			},
 			Email: {
-				background: "rgb(139 92 246 / 0.8)", // purple-500
-				border: "rgb(124 58 237)", // purple-600
+				background: "rgb(139 92 246 / 0.8)",
+				border: "rgb(124 58 237)",
 				text: "white",
 			},
 			"Phone Call": {
-				background: "rgb(236 72 153 / 0.8)", // pink-500
-				border: "rgb(219 39 119)", // pink-600
+				background: "rgb(236 72 153 / 0.8)",
+				border: "rgb(219 39 119)",
 				text: "white",
 			},
 			Other: {
-				background: "rgb(107 114 128 / 0.8)", // gray-500
-				border: "rgb(75 85 99)", // gray-600
+				background: "rgb(107 114 128 / 0.8)",
+				border: "rgb(75 85 99)",
 				text: "white",
 			},
 		};
 
-		return colors[type] || colors.Other;
+		return colors[type as keyof typeof colors] || colors.Other;
 	}
 
 	const CommunicationBadge = ({ comm }: { comm: any }) => {

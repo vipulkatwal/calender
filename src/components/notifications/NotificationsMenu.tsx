@@ -12,7 +12,6 @@ import {
 	BellIcon,
 	BellAlertIcon,
 	CheckCircleIcon,
-	XMarkIcon,
 	ExclamationCircleIcon,
 	ClockIcon,
 } from "@heroicons/react/24/outline";

@@ -31,3 +31,13 @@ export interface Communication {
 	date: string;
 	notes: string;
 }
+
+export interface Notification {
+	id: string; // Ensure id is included
+	type: "overdue" | "due"; // Adjust as necessary
+	title: string;
+	message: string;
+	companyId: string;
+	isRead: boolean;
+	createdAt: string;
+}

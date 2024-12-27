@@ -1,6 +1,16 @@
 import { Company, Communication, CommunicationType } from "../types";
 import { subDays, addDays } from "date-fns";
 
+export interface Notification {
+	id: string;
+	type: "overdue" | "due";
+	title: string;
+	message: string;
+	companyId: string;
+	isRead: boolean;
+	createdAt: string;
+}
+
 const companies: Company[] = [
 	{
 		id: "1",

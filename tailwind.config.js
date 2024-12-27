@@ -25,6 +25,7 @@ export default {
 				"slide-in": "slideIn 0.5s ease-out",
 				"slide-up": "slideUp 0.5s ease-out",
 				"bounce-slow": "bounce 3s infinite",
+				gradient: "gradient 8s ease infinite",
 			},
 			keyframes: {
 				fadeIn: {
@@ -38,6 +39,10 @@ export default {
 				slideUp: {
 					"0%": { transform: "translateY(100%)" },
 					"100%": { transform: "translateY(0)" },
+				},
+				gradient: {
+					"0%, 100%": { backgroundPosition: "0% 50%" },
+					"50%": { backgroundPosition: "100% 50%" },
 				},
 			},
 			boxShadow: {

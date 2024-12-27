@@ -11,9 +11,9 @@ import {
 	Legend,
 	ArcElement,
 } from "chart.js";
-import { Bar, Pie, Line } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
 import { motion } from "framer-motion";
-import { format, subDays, startOfMonth, endOfMonth } from "date-fns";
+import { format, startOfMonth, endOfMonth } from "date-fns";
 import { CommunicationType } from "../../types";
 import { showToast } from "../common/Toast";
 import jsPDF from "jspdf";
@@ -29,6 +29,29 @@ ChartJS.register(
 	Legend,
 	ArcElement
 );
+
+type CommunicationTypeStyle =
+	| "LinkedIn Post"
+	| "LinkedIn Message"
+	| "Email"
+	| "Phone Call"
+	| "Other";
+
+const styles: Record<
+	CommunicationType | "default",
+	{ background: string; text: string; border: string }
+> = {
+	"LinkedIn Post": { background: "blue", text: "white", border: "darkblue" },
+	"LinkedIn Message": {
+		background: "green",
+		text: "white",
+		border: "darkgreen",
+	},
+	Email: { background: "purple", text: "white", border: "darkpurple" },
+	"Phone Call": { background: "pink", text: "white", border: "darkpink" },
+	Other: { background: "gray", text: "white", border: "darkgray" },
+	default: { background: "lightgray", text: "black", border: "gray" },
+};
 
 export default function Reports() {
 	const [selectedMonth, setSelectedMonth] = useState(
@@ -195,35 +218,7 @@ export default function Reports() {
 		}
 	};
 
-	function getTypeStyle(type: string) {
-		const styles = {
-			"LinkedIn Post": {
-				background: "rgb(59 130 246 / 0.1)", // blue-500/10
-				text: "rgb(59 130 246)", // blue-500
-				border: "rgb(37 99 235)", // blue-600
-			},
-			"LinkedIn Message": {
-				background: "rgb(16 185 129 / 0.1)", // green-500/10
-				text: "rgb(16 185 129)", // green-500
-				border: "rgb(5 150 105)", // green-600
-			},
-			Email: {
-				background: "rgb(139 92 246 / 0.1)", // purple-500/10
-				text: "rgb(139 92 246)", // purple-500
-				border: "rgb(124 58 237)", // purple-600
-			},
-			"Phone Call": {
-				background: "rgb(236 72 153 / 0.1)", // pink-500/10
-				text: "rgb(236 72 153)", // pink-500
-				border: "rgb(219 39 119)", // pink-600
-			},
-			default: {
-				background: "rgb(107 114 128 / 0.1)", // gray-500/10
-				text: "rgb(107 114 128)", // gray-500
-				border: "rgb(75 85 99)", // gray-600
-			},
-		};
-
+	function getTypeStyle(type: CommunicationType) {
 		return styles[type] || styles.default;
 	}
 

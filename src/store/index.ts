@@ -17,9 +17,13 @@ export const store = configureStore({
 	preloadedState: {
 		companies: {
 			companies: dummyData.companies,
+			loading: false,
+			error: null,
 		},
 		communications: {
 			communications: dummyData.communications,
+			loading: false,
+			error: null,
 		},
 		communicationMethods: {
 			methods: dummyData.communicationMethods,

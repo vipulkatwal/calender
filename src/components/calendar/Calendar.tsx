@@ -8,6 +8,7 @@ import { format, addDays } from "date-fns";
 import CommunicationModal from "../communications/CommunicationModal";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+// import { EventInput } from "@fullcalendar/core";
 
 export default function Calendar() {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -22,31 +23,34 @@ export default function Calendar() {
 	);
 
 	function getEventColor(type: string) {
-		const colors = {
+		const colors: Record<
+			string,
+			{ background: string; border: string; text?: string }
+		> = {
 			"LinkedIn Post": {
-				background: "rgb(59 130 246 / 0.8)", // blue-500
-				border: "rgb(37 99 235)", // blue-600
+				background: "rgb(59 130 246 / 0.8)",
+				border: "rgb(37 99 235)",
 			},
 			"LinkedIn Message": {
-				background: "rgb(16 185 129 / 0.8)", // green-500
-				border: "rgb(5 150 105)", // green-600
+				background: "rgb(16 185 129 / 0.8)",
+				border: "rgb(5 150 105)",
 			},
 			Email: {
-				background: "rgb(139 92 246 / 0.8)", // purple-500
-				border: "rgb(124 58 237)", // purple-600
+				background: "rgb(139 92 246 / 0.8)",
+				border: "rgb(124 58 237)",
 			},
 			"Phone Call": {
-				background: "rgb(236 72 153 / 0.8)", // pink-500
-				border: "rgb(219 39 119)", // pink-600
+				background: "rgb(236 72 153 / 0.8)",
+				border: "rgb(219 39 119)",
 			},
 			Due: {
-				background: "#FEF3C7", // amber-100
-				border: "#F59E0B", // amber-500
-				text: "#92400E", // amber-800
+				background: "#FEF3C7",
+				border: "#F59E0B",
+				text: "#92400E",
 			},
 			default: {
-				background: "rgb(107 114 128 / 0.8)", // gray-500
-				border: "rgb(75 85 99)", // gray-600
+				background: "rgb(107 114 128 / 0.8)",
+				border: "rgb(75 85 99)",
 			},
 		};
 
@@ -58,14 +62,21 @@ export default function Calendar() {
 		// Regular communications
 		...communications.map((comm) => {
 			const company = companies.find((c) => c.id === comm.companyId);
-			const colors = getEventColor(comm.type);
+			const colors = getEventColor(
+				comm.type as
+					| "LinkedIn Post"
+					| "LinkedIn Message"
+					| "Email"
+					| "Phone Call"
+					| "Due"
+			);
 			return {
 				id: comm.id,
 				title: `${company?.name} - ${comm.type}`,
 				start: new Date(comm.date),
 				backgroundColor: colors.background,
 				borderColor: colors.border,
-				textColor: colors.text || "#FFFFFF",
+				textColor: "text" in colors ? colors.text : "#FFFFFF",
 				extendedProps: {
 					type: comm.type,
 					notes: comm.notes,
@@ -189,7 +200,9 @@ export default function Calendar() {
 					<FullCalendar
 						plugins={[dayGridPlugin, interactionPlugin]}
 						initialView="dayGridMonth"
-						events={events}
+						events={events.filter(
+							(event): event is NonNullable<typeof event> => event !== null
+						)}
 						headerToolbar={{
 							left: "prev,next today",
 							center: "title",

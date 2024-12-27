@@ -6,6 +6,7 @@ import { addCommunication } from "../../store/slices/communicationsSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { showToast } from "../common/Toast";
+import { CommunicationType } from "../../types";
 
 interface CommunicationModalProps {
 	isOpen: boolean;
@@ -49,7 +50,9 @@ export default function CommunicationModal({
 		const newCommunications = selectedCompanyIds.map((companyId) => ({
 			id: crypto.randomUUID(),
 			companyId,
-			type: methods.find((m) => m.id === formData.type)?.name || "",
+			type:
+				(methods.find((m) => m.id === formData.type)
+					?.name as CommunicationType) || "",
 			date: new Date(formData.date).toISOString(),
 			notes: formData.notes,
 		}));
