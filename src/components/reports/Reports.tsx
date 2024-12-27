@@ -30,13 +30,6 @@ ChartJS.register(
 	ArcElement
 );
 
-type CommunicationTypeStyle =
-	| "LinkedIn Post"
-	| "LinkedIn Message"
-	| "Email"
-	| "Phone Call"
-	| "Other";
-
 const styles: Record<
 	CommunicationType | "default",
 	{ background: string; text: string; border: string }

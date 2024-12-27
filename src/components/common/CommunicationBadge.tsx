@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { getEventColor } from "../../utils/communicationStyles";
+import { CommunicationType } from "../../types";
 
 interface CommunicationBadgeProps {
-	type: string;
+	type: CommunicationType;
 	showTooltip?: boolean;
 	tooltipContent?: string;
 }
