@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Company } from "../../types";
-import { motion } from "framer-motion";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface CompanyFormProps {
 	initialData?: Partial<Company>;
@@ -69,212 +67,171 @@ export default function CompanyForm({
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
-			<div className="bg-gradient-to-r from-primary-600 to-primary-700 -m-6 p-6 pb-8">
-				<h2 className="text-xl font-semibold text-white">
-					{initialData ? "Edit Company" : "Add New Company"}
-				</h2>
-				<p className="mt-1 text-sm text-primary-100">
-					Fill in the details below to {initialData ? "update" : "add"} a
-					company
-				</p>
+		<form onSubmit={handleSubmit} className="space-y-4">
+			<div>
+				<label className="block text-sm font-medium text-gray-700">Name</label>
+				<input
+					type="text"
+					value={formData.name}
+					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+					className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+					required
+				/>
 			</div>
 
-			<div className="px-1 space-y-6">
-				{/* Company Basic Info */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
-							Company Name
-						</label>
-						<input
-							type="text"
-							value={formData.name}
-							onChange={(e) =>
-								setFormData({ ...formData, name: e.target.value })
-							}
-							className="input-field"
-							placeholder="Enter company name"
-							required
-						/>
-					</div>
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Location
+				</label>
+				<input
+					type="text"
+					value={formData.location}
+					onChange={(e) =>
+						setFormData({ ...formData, location: e.target.value })
+					}
+					className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+					required
+				/>
+			</div>
 
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-2">
-							Location
-						</label>
-						<input
-							type="text"
-							value={formData.location}
-							onChange={(e) =>
-								setFormData({ ...formData, location: e.target.value })
-							}
-							className="input-field"
-							placeholder="City, Country"
-							required
-						/>
-					</div>
-				</div>
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					LinkedIn Profile
+				</label>
+				<input
+					type="url"
+					value={formData.linkedinProfile}
+					onChange={(e) =>
+						setFormData({ ...formData, linkedinProfile: e.target.value })
+					}
+					className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+					required
+				/>
+			</div>
 
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
-						LinkedIn Profile
-					</label>
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Emails
+				</label>
+				<div className="mt-1 flex gap-2">
 					<input
-						type="url"
-						value={formData.linkedinProfile}
-						onChange={(e) =>
-							setFormData({ ...formData, linkedinProfile: e.target.value })
-						}
-						className="input-field"
-						placeholder="https://linkedin.com/company/..."
-						required
+						type="email"
+						value={newEmail}
+						onChange={(e) => setNewEmail(e.target.value)}
+						className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 					/>
+					<button
+						type="button"
+						onClick={addEmail}
+						className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+					>
+						Add
+					</button>
 				</div>
-
-				{/* Email Section */}
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Email Addresses
-					</label>
-					<div className="flex gap-2">
-						<input
-							type="email"
-							value={newEmail}
-							onChange={(e) => setNewEmail(e.target.value)}
-							className="input-field flex-1"
-							placeholder="Add email address"
-						/>
-						<motion.button
-							type="button"
-							onClick={addEmail}
-							whileHover={{ scale: 1.02 }}
-							whileTap={{ scale: 0.98 }}
-							className="btn-primary px-4"
+				<div className="mt-2 flex flex-wrap gap-2">
+					{formData.emails?.map((email) => (
+						<span
+							key={email}
+							className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
 						>
-							<PlusIcon className="h-5 w-5" />
-						</motion.button>
-					</div>
-					<div className="mt-3 flex flex-wrap gap-2">
-						{formData.emails?.map((email) => (
-							<motion.span
-								key={email}
-								initial={{ opacity: 0, scale: 0.8 }}
-								animate={{ opacity: 1, scale: 1 }}
-								exit={{ opacity: 0, scale: 0.8 }}
-								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-primary-50 text-primary-700"
+							{email}
+							<button
+								type="button"
+								onClick={() => removeEmail(email)}
+								className="text-indigo-600 hover:text-indigo-500"
 							>
-								{email}
-								<button
-									type="button"
-									onClick={() => removeEmail(email)}
-									className="text-primary-600 hover:text-primary-700"
-								>
-									<XMarkIcon className="h-4 w-4" />
-								</button>
-							</motion.span>
-						))}
-					</div>
-				</div>
-
-				{/* Phone Section */}
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Phone Numbers
-					</label>
-					<div className="flex gap-2">
-						<input
-							type="tel"
-							value={newPhone}
-							onChange={(e) => setNewPhone(e.target.value)}
-							className="input-field flex-1"
-							placeholder="Add phone number"
-						/>
-						<motion.button
-							type="button"
-							onClick={addPhone}
-							whileHover={{ scale: 1.02 }}
-							whileTap={{ scale: 0.98 }}
-							className="btn-primary px-4"
-						>
-							<PlusIcon className="h-5 w-5" />
-						</motion.button>
-					</div>
-					<div className="mt-3 flex flex-wrap gap-2">
-						{formData.phoneNumbers?.map((phone) => (
-							<motion.span
-								key={phone}
-								initial={{ opacity: 0, scale: 0.8 }}
-								animate={{ opacity: 1, scale: 1 }}
-								exit={{ opacity: 0, scale: 0.8 }}
-								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-primary-50 text-primary-700"
-							>
-								{phone}
-								<button
-									type="button"
-									onClick={() => removePhone(phone)}
-									className="text-primary-600 hover:text-primary-700"
-								>
-									<XMarkIcon className="h-4 w-4" />
-								</button>
-							</motion.span>
-						))}
-					</div>
-				</div>
-
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Comments
-					</label>
-					<textarea
-						value={formData.comments}
-						onChange={(e) =>
-							setFormData({ ...formData, comments: e.target.value })
-						}
-						rows={3}
-						className="input-field"
-						placeholder="Add any additional notes..."
-					/>
-				</div>
-
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Communication Frequency (days)
-					</label>
-					<input
-						type="number"
-						min="1"
-						value={formData.communicationPeriodicity}
-						onChange={(e) =>
-							setFormData({
-								...formData,
-								communicationPeriodicity: parseInt(e.target.value),
-							})
-						}
-						className="input-field w-full sm:w-32"
-						required
-					/>
+								×
+							</button>
+						</span>
+					))}
 				</div>
 			</div>
 
-			<div className="flex justify-end gap-3 pt-6 mt-8 border-t">
-				<motion.button
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Phone Numbers
+				</label>
+				<div className="mt-1 flex gap-2">
+					<input
+						type="tel"
+						value={newPhone}
+						onChange={(e) => setNewPhone(e.target.value)}
+						className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+					/>
+					<button
+						type="button"
+						onClick={addPhone}
+						className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+					>
+						Add
+					</button>
+				</div>
+				<div className="mt-2 flex flex-wrap gap-2">
+					{formData.phoneNumbers?.map((phone) => (
+						<span
+							key={phone}
+							className="inline-flex items-center gap-1 rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10"
+						>
+							{phone}
+							<button
+								type="button"
+								onClick={() => removePhone(phone)}
+								className="text-indigo-600 hover:text-indigo-500"
+							>
+								×
+							</button>
+						</span>
+					))}
+				</div>
+			</div>
+
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Comments
+				</label>
+				<textarea
+					value={formData.comments}
+					onChange={(e) =>
+						setFormData({ ...formData, comments: e.target.value })
+					}
+					rows={3}
+					className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+				/>
+			</div>
+
+			<div>
+				<label className="block text-sm font-medium text-gray-700">
+					Communication Periodicity (days)
+				</label>
+				<input
+					type="number"
+					min="1"
+					value={formData.communicationPeriodicity}
+					onChange={(e) =>
+						setFormData({
+							...formData,
+							communicationPeriodicity: parseInt(e.target.value),
+						})
+					}
+					className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+					required
+				/>
+			</div>
+
+			<div className="flex justify-end gap-3">
+				<button
 					type="button"
 					onClick={onCancel}
-					whileHover={{ scale: 1.02 }}
-					whileTap={{ scale: 0.98 }}
-					className="btn-secondary"
+					className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 				>
 					Cancel
-				</motion.button>
-				<motion.button
+				</button>
+				<button
 					type="submit"
-					whileHover={{ scale: 1.02 }}
-					whileTap={{ scale: 0.98 }}
-					className="btn-primary"
+					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
 				>
-					{initialData ? "Update Company" : "Add Company"}
-				</motion.button>
+					{initialData ? "Update" : "Add"}
+				</button>
 			</div>
 		</form>
 	);
