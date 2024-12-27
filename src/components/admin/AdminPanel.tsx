@@ -7,17 +7,17 @@ import {
 	ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 
-const tabVariants = {
-	selected: {
-		backgroundColor: "rgb(255, 255, 255)",
-		color: "rgb(17, 24, 39)",
-		boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-	},
-	notSelected: {
-		backgroundColor: "transparent",
-		color: "rgb(107, 114, 128)",
-	},
-};
+// const tabVariants = {
+// 	selected: {
+// 		backgroundColor: "rgb(255, 255, 255)",
+// 		color: "rgb(17, 24, 39)",
+// 		boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+// 	},
+// 	notSelected: {
+// 		backgroundColor: "transparent",
+// 		color: "rgb(107, 114, 128)",
+// 	},
+// };
 
 export default function AdminPanel() {
 	const [activeTab, setActiveTab] = useState<"companies" | "methods">(

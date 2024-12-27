@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +13,10 @@ export default function Dashboard() {
 	const [showCommunicationModal, setShowCommunicationModal] = useState(false);
 	const [highlightsDisabled, setHighlightsDisabled] = useState<string[]>([]);
 
+	const communications = useSelector(
+		(state: RootState) => state.communications.communications
+	);
+
 	const {
 		lastFiveCommunications,
 		getNextCommunicationDate,
@@ -20,12 +24,28 @@ export default function Dashboard() {
 		companies,
 	} = useCommunications();
 
+	const CommunicationBadges = useMemo(() => {
+		return ({ companyId }: { companyId: string }) => (
+			<div className="flex flex-wrap gap-2">
+				{lastFiveCommunications(companyId).map((comm) => (
+					<CommunicationBadge key={comm.id} comm={comm} />
+				))}
+			</div>
+		);
+	}, [communications, lastFiveCommunications]);
+
 	const getRowHighlight = (companyId: string) => {
-		if (highlightsDisabled.includes(companyId)) return "bg-white";
+		if (highlightsDisabled.includes(companyId)) return "";
+
 		const status = getCommunicationStatus(companyId);
-		if (status === "overdue") return "bg-red-50";
-		if (status === "due") return "bg-yellow-50";
-		return "bg-white";
+		switch (status) {
+			case "overdue":
+				return "bg-red-50/80";
+			case "due":
+				return "bg-amber-50/80";
+			default:
+				return "";
+		}
 	};
 
 	const toggleCompanySelection = (companyId: string) => {
@@ -293,7 +313,9 @@ export default function Dashboard() {
 							{companies.map((company) => (
 								<tr
 									key={company.id}
-									className={`${getRowHighlight(company.id)} transition-colors`}
+									className={`${getRowHighlight(
+										company.id
+									)} transition-colors duration-200`}
 								>
 									<td className="px-6 py-4 whitespace-nowrap">
 										<input
@@ -312,11 +334,7 @@ export default function Dashboard() {
 										</div>
 									</td>
 									<td className="px-4 sm:px-6 py-4">
-										<div className="flex flex-wrap gap-2">
-											{lastFiveCommunications(company.id).map((comm) => (
-												<CommunicationBadge key={comm.id} comm={comm} />
-											))}
-										</div>
+										<CommunicationBadges companyId={company.id} />
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap">
 										{getNextCommunicationDate(company.id) ? (
@@ -355,6 +373,9 @@ export default function Dashboard() {
 					setSelectedCompanies([]);
 				}}
 				selectedCompanies={selectedCompanies}
+				onCommunicationAdded={() => {
+					setHighlightsDisabled([]);
+				}}
 			/>
 		</div>
 	);

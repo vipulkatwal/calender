@@ -22,16 +22,9 @@ const notificationsSlice = createSlice({
 	name: "notifications",
 	initialState,
 	reducers: {
-		addNotification: (
-			state,
-			action: PayloadAction<Omit<Notification, "id" | "isRead" | "createdAt">>
-		) => {
-			state.notifications.push({
-				...action.payload,
-				id: crypto.randomUUID(),
-				isRead: false,
-				createdAt: new Date().toISOString(),
-			});
+		syncNotifications: (state, action: PayloadAction<Notification[]>) => {
+			// Replace all notifications with new ones
+			state.notifications = action.payload;
 		},
 		markAsRead: (state, action: PayloadAction<string>) => {
 			const notification = state.notifications.find(
@@ -51,7 +44,7 @@ const notificationsSlice = createSlice({
 });
 
 export const {
-	addNotification,
+	syncNotifications,
 	markAsRead,
 	markAllAsRead,
 	clearNotifications,

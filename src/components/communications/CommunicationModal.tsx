@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -7,12 +7,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { showToast } from "../common/Toast";
 
+interface CommunicationModalProps {
+	isOpen: boolean;
+	onClose: () => void;
+	selectedCompanies?: string[];
+	initialDate?: string;
+	onCommunicationAdded?: () => void;
+}
+
 export default function CommunicationModal({
 	isOpen,
 	onClose,
 	selectedCompanies = [],
 	initialDate,
-}) {
+	onCommunicationAdded,
+}: CommunicationModalProps) {
 	const dispatch = useDispatch();
 	const [step, setStep] = useState<"company" | "details">("company");
 	const [selectedCompanyIds, setSelectedCompanyIds] =
@@ -24,27 +33,29 @@ export default function CommunicationModal({
 		(state: RootState) => state.companies.companies
 	);
 
+	useEffect(() => {
+		setSelectedCompanyIds(selectedCompanies);
+	}, [selectedCompanies]);
+
 	const [formData, setFormData] = useState({
 		type: "",
 		notes: "",
 		date: initialDate || format(new Date(), "yyyy-MM-dd"),
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		selectedCompanyIds.forEach((companyId) => {
-			const company = companies.find((c) => c.id === companyId);
-			if (!company) return;
 
-			dispatch(
-				addCommunication({
-					id: crypto.randomUUID(),
-					companyId,
-					type: methods.find((m) => m.id === formData.type)?.name || "",
-					date: new Date(formData.date).toISOString(),
-					notes: formData.notes,
-				})
-			);
+		const newCommunications = selectedCompanyIds.map((companyId) => ({
+			id: crypto.randomUUID(),
+			companyId,
+			type: methods.find((m) => m.id === formData.type)?.name || "",
+			date: new Date(formData.date).toISOString(),
+			notes: formData.notes,
+		}));
+
+		newCommunications.forEach((comm) => {
+			dispatch(addCommunication(comm));
 		});
 
 		showToast.success(
@@ -52,6 +63,11 @@ export default function CommunicationModal({
 				selectedCompanyIds.length > 1 ? "s" : ""
 			} logged successfully`
 		);
+
+		if (onCommunicationAdded) {
+			onCommunicationAdded();
+		}
+
 		handleClose();
 	};
 

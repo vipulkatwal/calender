@@ -10,25 +10,17 @@ export function useCommunications() {
 		(state: RootState) => state.companies.companies
 	);
 
-	const lastFiveCommunications = (companyId: string) => {
-		return communications
-			.filter((comm) => comm.companyId === companyId)
-			.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-			.slice(0, 5);
-	};
-
 	const getNextCommunicationDate = (companyId: string) => {
-		const lastComm = communications
+		const companyCommunications = communications
 			.filter((comm) => comm.companyId === companyId)
-			.sort(
-				(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-			)[0];
+			.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-		if (!lastComm) return null;
+		if (companyCommunications.length === 0) return null;
 
 		const company = companies.find((c) => c.id === companyId);
 		if (!company) return null;
 
+		const lastComm = companyCommunications[0];
 		return addDays(new Date(lastComm.date), company.communicationPeriodicity);
 	};
 
@@ -36,9 +28,20 @@ export function useCommunications() {
 		const nextDate = getNextCommunicationDate(companyId);
 		if (!nextDate) return "none";
 
-		if (isBefore(nextDate, new Date())) return "overdue";
-		if (isToday(nextDate)) return "due";
+		if (isBefore(nextDate, new Date()) && !isToday(nextDate)) {
+			return "overdue";
+		}
+		if (isToday(nextDate)) {
+			return "due";
+		}
 		return "upcoming";
+	};
+
+	const lastFiveCommunications = (companyId: string) => {
+		return communications
+			.filter((comm) => comm.companyId === companyId)
+			.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+			.slice(0, 5);
 	};
 
 	return {

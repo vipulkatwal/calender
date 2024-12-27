@@ -12,6 +12,8 @@ import {
 	ChartBarIcon,
 	Cog8ToothIcon,
 	ArrowRightOnRectangleIcon,
+	Bars3Icon,
+	XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -31,16 +33,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const navigation = [
-		{ name: "Dashboard", href: "/", icon: HomeIcon },
-		{ name: "Calendar", href: "/calendar", icon: CalendarIcon },
-		...(user?.role === "admin"
-			? [
-					{ name: "Admin", href: "/admin", icon: Cog8ToothIcon },
-					{ name: "Reports", href: "/reports", icon: ChartBarIcon },
-			  ]
-			: []),
-	];
+	// Close mobile menu when route changes
+	useEffect(() => {
+		setIsMobileMenuOpen(false);
+	}, [location.pathname]);
 
 	const handleLogout = () => {
 		dispatch(clearUser());
@@ -51,76 +47,98 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<nav
-				className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+				className={`fixed top-0 left-0 right-0 z-10 transition-all duration-200 ${
 					isScrolled
-						? "bg-gradient-to-r from-primary-600/90 to-primary-700/90 backdrop-blur-lg shadow-lg"
-						: "bg-gradient-to-r from-primary-600 to-primary-700 shadow"
+						? "bg-blue-300/80 backdrop-blur-md shadow-md"
+						: "bg-blue-300/40 backdrop-blur-sm shadow-md"
 				}`}
 			>
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 justify-between">
-						<div className="flex">
-							<div className="flex flex-shrink-0 items-center">
+					<div className="flex h-16 justify-between items-center">
+						<motion.div
+							className="flex-shrink-0"
+							initial={{ opacity: 0, x: -20 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.3 }}
+						>
+							<Link to="/" className="flex items-center">
 								<img
-									className="h-16 w-auto"
-									src="/logo.png"
-									alt="Company logo"
+									src="/logo.svg"
+									className="h-9 w-9 drop-shadow-lg"
+									alt="Logo"
 								/>
-							</div>
-							<div className="hidden sm:ml-8 sm:flex sm:space-x-8">
-								{navigation.map((item) => {
-									const Icon = item.icon;
-									return (
-										<Link
-											key={item.name}
-											to={item.href}
-											className={`inline-flex items-center space-x-2 border-b-2 px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
-												location.pathname === item.href
-													? "border-white text-white"
-													: "border-transparent text-white/70 hover:border-white/30 hover:text-white"
-											}`}
-										>
-											<Icon className="h-5 w-5" />
-											<span>{item.name}</span>
-										</Link>
-									);
-								})}
-							</div>
-						</div>
-						<div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-							<div className="text-white">
-								<NotificationsMenu />
-							</div>
-							<motion.button
-								whileHover={{ scale: 1.02 }}
-								whileTap={{ scale: 0.98 }}
-								onClick={handleLogout}
-								className="group flex items-center space-x-2 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 hover:bg-white/20 transition-all duration-200"
+								<span
+									className={`ml-2 text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent transition-all duration-200 ${
+										isScrolled ? "opacity-100" : "opacity-90"
+									}`}
+								>
+									Calendar.io
+								</span>
+							</Link>
+						</motion.div>
+
+						<div className="hidden md:flex flex-1 justify-center">
+							<motion.div
+								className="flex space-x-1 bg-gray-100/80 backdrop-blur-sm rounded-full p-1.5"
+								initial={{ opacity: 0, y: -20 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.3, delay: 0.1 }}
 							>
-								<ArrowRightOnRectangleIcon className="h-5 w-5 text-white/70 group-hover:text-white" />
-								<span>Logout</span>
-							</motion.button>
+								<NavLink to="/" icon={<HomeIcon className="h-5 w-5" />}>
+									Dashboard
+								</NavLink>
+								<NavLink
+									to="/calendar"
+									icon={<CalendarIcon className="h-5 w-5" />}
+								>
+									Calendar
+								</NavLink>
+								{user?.role === "admin" && (
+									<>
+										<NavLink
+											to="/admin"
+											icon={<Cog8ToothIcon className="h-5 w-5" />}
+										>
+											Admin
+										</NavLink>
+										<NavLink
+											to="/reports"
+											icon={<ChartBarIcon className="h-5 w-5" />}
+										>
+											Reports
+										</NavLink>
+									</>
+								)}
+							</motion.div>
 						</div>
-						<div className="-mr-2 flex items-center sm:hidden">
+
+						<motion.div
+							className="hidden md:flex items-center space-x-4"
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.3, delay: 0.2 }}
+						>
+							<NotificationsMenu />
 							<button
-								type="button"
+								onClick={handleLogout}
+								className="flex items-center space-x-2 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200"
+							>
+								<ArrowRightOnRectangleIcon className="h-5 w-5" />
+								<span>Logout</span>
+							</button>
+						</motion.div>
+
+						<div className="flex md:hidden">
+							<button
 								onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-								className="inline-flex items-center justify-center rounded-md p-2 text-white/70 hover:bg-white/10 hover:text-white focus:outline-none"
+								className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
 							>
 								<span className="sr-only">Open main menu</span>
-								<svg
-									className="h-6 w-6"
-									fill="none"
-									viewBox="0 0 24 24"
-									strokeWidth="1.5"
-									stroke="currentColor"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-									/>
-								</svg>
+								{isMobileMenuOpen ? (
+									<XMarkIcon className="block h-6 w-6" />
+								) : (
+									<Bars3Icon className="block h-6 w-6" />
+								)}
 							</button>
 						</div>
 					</div>
@@ -130,38 +148,48 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				<AnimatePresence>
 					{isMobileMenuOpen && (
 						<motion.div
+							className="md:hidden"
 							initial={{ opacity: 0, height: 0 }}
 							animate={{ opacity: 1, height: "auto" }}
 							exit={{ opacity: 0, height: 0 }}
-							className="sm:hidden bg-primary-800/50 backdrop-blur-lg"
+							transition={{ duration: 0.2 }}
 						>
-							<div className="space-y-1 pb-3 pt-2">
-								{navigation.map((item) => {
-									const Icon = item.icon;
-									return (
-										<Link
-											key={item.name}
-											to={item.href}
-											className={`flex items-center space-x-2 border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-												location.pathname === item.href
-													? "border-white bg-white/10 text-white"
-													: "border-transparent text-white/70 hover:border-white/30 hover:bg-white/10 hover:text-white"
-											}`}
-											onClick={() => setIsMobileMenuOpen(false)}
-										>
-											<Icon className="h-5 w-5" />
-											<span>{item.name}</span>
-										</Link>
-									);
-								})}
-								<button
-									type="button"
-									onClick={handleLogout}
-									className="flex w-full items-center space-x-2 border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-white/70 hover:border-white/30 hover:bg-white/10 hover:text-white"
+							<div className="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md shadow-lg">
+								<MobileNavLink to="/" icon={<HomeIcon className="h-5 w-5" />}>
+									Dashboard
+								</MobileNavLink>
+								<MobileNavLink
+									to="/calendar"
+									icon={<CalendarIcon className="h-5 w-5" />}
 								>
-									<ArrowRightOnRectangleIcon className="h-5 w-5" />
-									<span>Logout</span>
-								</button>
+									Calendar
+								</MobileNavLink>
+								{user?.role === "admin" && (
+									<>
+										<MobileNavLink
+											to="/admin"
+											icon={<Cog8ToothIcon className="h-5 w-5" />}
+										>
+											Admin
+										</MobileNavLink>
+										<MobileNavLink
+											to="/reports"
+											icon={<ChartBarIcon className="h-5 w-5" />}
+										>
+											Reports
+										</MobileNavLink>
+									</>
+								)}
+								<div className="pt-4 flex items-center justify-between px-3">
+									<NotificationsMenu />
+									<button
+										onClick={handleLogout}
+										className="flex items-center space-x-2 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-all duration-200"
+									>
+										<ArrowRightOnRectangleIcon className="h-5 w-5" />
+										<span>Logout</span>
+									</button>
+								</div>
 							</div>
 						</motion.div>
 					)}
@@ -172,5 +200,59 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				{children}
 			</main>
 		</div>
+	);
+}
+
+function NavLink({
+	to,
+	icon,
+	children,
+}: {
+	to: string;
+	icon: React.ReactNode;
+	children: React.ReactNode;
+}) {
+	const location = useLocation();
+	const isActive = location.pathname === to;
+
+	return (
+		<Link
+			to={to}
+			className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+				isActive
+					? "bg-white text-primary-600 shadow-sm"
+					: "text-gray-600 hover:bg-white hover:text-primary-600 hover:shadow-sm"
+			}`}
+		>
+			{icon}
+			<span>{children}</span>
+		</Link>
+	);
+}
+
+function MobileNavLink({
+	to,
+	icon,
+	children,
+}: {
+	to: string;
+	icon: React.ReactNode;
+	children: React.ReactNode;
+}) {
+	const location = useLocation();
+	const isActive = location.pathname === to;
+
+	return (
+		<Link
+			to={to}
+			className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium transition-all duration-200 ${
+				isActive
+					? "bg-primary-50 text-primary-600"
+					: "text-gray-600 hover:bg-gray-50 hover:text-primary-600"
+			}`}
+		>
+			{icon}
+			<span>{children}</span>
+		</Link>
 	);
 }
