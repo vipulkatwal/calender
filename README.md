@@ -2,6 +2,8 @@
 
 A modern React application for managing and tracking company communications with an intuitive calendar interface and real-time notifications. ✨
 
+![Calender.io](./public/preview.png)
+
 ## ✅ Features
 
 ### 1. Dashboard 📈
