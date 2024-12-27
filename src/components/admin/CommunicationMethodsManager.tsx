@@ -10,6 +10,10 @@ import {
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import { toast } from "react-toastify";
 
+/**
+ * CommunicationMethodsManager Component
+ * Manages the communication methods with responsive design for all screen sizes
+ */
 export default function CommunicationMethodsManager() {
 	const dispatch = useDispatch();
 	const methods = useSelector(
@@ -24,6 +28,7 @@ export default function CommunicationMethodsManager() {
 		isMandatory: false,
 	});
 
+	// Form submission handler
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (editingMethod) {
@@ -48,6 +53,7 @@ export default function CommunicationMethodsManager() {
 		});
 	};
 
+	// Delete method handler with confirmation
 	const handleDelete = (method: any) => {
 		if (confirm("Are you sure you want to delete this method?")) {
 			dispatch(deleteMethod(method.id));
@@ -55,6 +61,7 @@ export default function CommunicationMethodsManager() {
 		}
 	};
 
+	// Reorder methods handler
 	const handleReorder = (newOrder: any[]) => {
 		const updatedMethods = newOrder.map((method, index) => ({
 			...method,
@@ -64,26 +71,33 @@ export default function CommunicationMethodsManager() {
 	};
 
 	return (
-		<div className="space-y-6">
-			<div className="flex justify-end">
+		// Main container with responsive padding
+		<div className="space-y-6 px-4 sm:px-6 lg:px-8">
+			{/* Header section with responsive button placement */}
+			<div className="flex justify-end sm:justify-end">
 				<motion.button
 					whileHover={{ scale: 1.02 }}
 					whileTap={{ scale: 0.98 }}
 					onClick={() => setShowForm(true)}
-					className="btn-primary"
+					className="btn-primary w-full sm:w-auto"
 				>
 					Add Method
 				</motion.button>
 			</div>
 
+			{/* Reorderable list with responsive spacing */}
 			<Reorder.Group
 				axis="y"
 				values={methods}
 				onReorder={handleReorder}
-				className="space-y-4"
+				className="space-y-4 sm:space-y-6"
 			>
 				{methods.map((method) => (
-					<Reorder.Item key={method.id} value={method} className="cursor-move">
+					<Reorder.Item
+						key={method.id}
+						value={method}
+						className="cursor-move focus:outline-none"
+					>
 						<motion.div
 							layout
 							initial={{ opacity: 0, y: 20 }}
@@ -91,8 +105,8 @@ export default function CommunicationMethodsManager() {
 							exit={{ opacity: 0, y: -20 }}
 							className="group relative bg-white rounded-xl shadow-soft hover:shadow-lg transition-all duration-300"
 						>
-							{/* Card Header with Actions */}
-							<div className="absolute right-4 top-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+							{/* Action buttons with responsive positioning */}
+							<div className="absolute right-2 sm:right-4 top-2 sm:top-4 flex space-x-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 								<motion.button
 									whileHover={{ scale: 1.1 }}
 									whileTap={{ scale: 0.9 }}
@@ -101,10 +115,10 @@ export default function CommunicationMethodsManager() {
 										setFormData(method);
 										setShowForm(true);
 									}}
-									className="p-2 rounded-full bg-white shadow-md text-primary-600 hover:text-primary-700"
+									className="p-1.5 sm:p-2 rounded-full bg-white shadow-md text-primary-600 hover:text-primary-700"
 								>
 									<svg
-										className="h-4 w-4"
+										className="h-3.5 w-3.5 sm:h-4 sm:w-4"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
@@ -121,10 +135,10 @@ export default function CommunicationMethodsManager() {
 									whileHover={{ scale: 1.1 }}
 									whileTap={{ scale: 0.9 }}
 									onClick={() => handleDelete(method)}
-									className="p-2 rounded-full bg-white shadow-md text-red-600 hover:text-red-700"
+									className="p-1.5 sm:p-2 rounded-full bg-white shadow-md text-red-600 hover:text-red-700"
 								>
 									<svg
-										className="h-4 w-4"
+										className="h-3.5 w-3.5 sm:h-4 sm:w-4"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
@@ -139,27 +153,27 @@ export default function CommunicationMethodsManager() {
 								</motion.button>
 							</div>
 
-							{/* Card Content */}
-							<div className="p-6">
-								<div className="flex items-center mb-4">
-									<div className="flex-1">
-										<h3 className="text-lg font-semibold text-gray-900 mb-1">
+							{/* Card content with responsive padding and typography */}
+							<div className="p-4 sm:p-6">
+								<div className="flex items-center mb-3 sm:mb-4">
+									<div className="flex-1 min-w-0">
+										<h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 truncate">
 											{method.name}
 										</h3>
-										<div className="flex items-center gap-3">
-											<div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+										<div className="flex flex-wrap items-center gap-2 sm:gap-3">
+											<div className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
 												Sequence: {method.sequence}
 											</div>
 											{method.isMandatory && (
-												<div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+												<div className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
 													Mandatory
 												</div>
 											)}
 										</div>
 									</div>
-									<div className="text-gray-400">
+									<div className="text-gray-400 ml-4">
 										<svg
-											className="h-6 w-6"
+											className="h-5 w-5 sm:h-6 sm:w-6"
 											fill="none"
 											viewBox="0 0 24 24"
 											stroke="currentColor"
@@ -173,18 +187,20 @@ export default function CommunicationMethodsManager() {
 										</svg>
 									</div>
 								</div>
-								<p className="text-sm text-gray-600">{method.description}</p>
+								<p className="text-xs sm:text-sm text-gray-600 line-clamp-2 sm:line-clamp-none">
+									{method.description}
+								</p>
 							</div>
 						</motion.div>
 					</Reorder.Item>
 				))}
 			</Reorder.Group>
 
-			{/* Method Form Modal */}
+			{/* Modal form with responsive layout */}
 			<AnimatePresence>
 				{showForm && (
 					<div className="fixed inset-0 z-10 overflow-y-auto">
-						<div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+						<div className="flex min-h-full items-end sm:items-center justify-center p-4 text-center sm:p-0">
 							<motion.div
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
@@ -197,9 +213,9 @@ export default function CommunicationMethodsManager() {
 								initial={{ opacity: 0, scale: 0.9 }}
 								animate={{ opacity: 1, scale: 1 }}
 								exit={{ opacity: 0, scale: 0.9 }}
-								className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+								className="relative transform overflow-hidden rounded-lg bg-white w-full sm:max-w-lg mx-4 sm:mx-auto"
 							>
-								<form onSubmit={handleSubmit} className="space-y-4">
+								<form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
 									<div>
 										<label className="label">Method Name</label>
 										<input
@@ -269,14 +285,15 @@ export default function CommunicationMethodsManager() {
 										</label>
 									</div>
 
-									<div className="flex justify-end gap-3 pt-4">
+									{/* Form actions with responsive spacing */}
+									<div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
 										<motion.button
 											type="button"
 											onClick={() => {
 												setShowForm(false);
 												setEditingMethod(null);
 											}}
-											className="btn-secondary"
+											className="btn-secondary w-full sm:w-auto order-2 sm:order-1"
 											whileHover={{ scale: 1.02 }}
 											whileTap={{ scale: 0.98 }}
 										>
@@ -284,7 +301,7 @@ export default function CommunicationMethodsManager() {
 										</motion.button>
 										<motion.button
 											type="submit"
-											className="btn-primary"
+											className="btn-primary w-full sm:w-auto order-1 sm:order-2"
 											whileHover={{ scale: 1.02 }}
 											whileTap={{ scale: 0.98 }}
 										>

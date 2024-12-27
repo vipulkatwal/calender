@@ -17,6 +17,10 @@ import {
 	ClockIcon,
 } from "@heroicons/react/24/outline";
 
+/**
+ * NotificationsMenu component
+ * Displays notifications in a dropdown panel with responsive design
+ */
 export default function NotificationsMenu() {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
@@ -58,6 +62,7 @@ export default function NotificationsMenu() {
 
 	return (
 		<div className="relative">
+			{/* Notification bell button - responsive sizing */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				className="relative rounded-full p-2 text-gray-700 hover:bg-gray-200 transition-all duration-200"
@@ -81,19 +86,23 @@ export default function NotificationsMenu() {
 			<AnimatePresence>
 				{isOpen && (
 					<>
+						{/* Backdrop - covers entire screen */}
 						<div
 							className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
 							onClick={() => setIsOpen(false)}
 						/>
+
+						{/* Notifications panel - responsive width and positioning */}
 						<motion.div
 							initial={{ opacity: 0, scale: 0.95, y: -20 }}
 							animate={{ opacity: 1, scale: 1, y: 0 }}
 							exit={{ opacity: 0, scale: 0.95, y: -20 }}
 							transition={{ duration: 0.2 }}
-							className="absolute right-0 mt-3 w-96 origin-top-right z-50"
+							className="absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-96 origin-top-right z-50"
 						>
 							<div className="rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 overflow-hidden">
-								<div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600">
+								{/* Header section with responsive padding */}
+								<div className="p-3 sm:p-4 bg-gradient-to-r from-blue-500 to-blue-600">
 									<div className="flex items-center justify-between">
 										<h2 className="text-lg font-semibold text-white">
 											Notifications
@@ -115,7 +124,8 @@ export default function NotificationsMenu() {
 									</div>
 								</div>
 
-								<div className="divide-y divide-gray-100 max-h-[calc(100vh-200px)] overflow-y-auto">
+								{/* Notifications list with responsive height and padding */}
+								<div className="divide-y divide-gray-100 max-h-[60vh] sm:max-h-[calc(100vh-200px)] overflow-y-auto">
 									{notifications.length === 0 ? (
 										<div className="p-8 text-center">
 											<BellIcon className="mx-auto h-12 w-12 text-gray-400" />

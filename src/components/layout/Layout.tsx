@@ -16,6 +16,10 @@ import {
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 
+/**
+ * Main Layout component that handles the overall page structure and navigation
+ * Includes responsive navbar, mobile menu, and main content area
+ */
 export default function Layout({ children }: { children: React.ReactNode }) {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isScrolled, setIsScrolled] = useState(false);
@@ -46,6 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
+			{/* Responsive navbar with dynamic background */}
 			<nav
 				className={`fixed top-0 left-0 right-0 z-10 transition-all duration-200 ${
 					isScrolled
@@ -54,7 +59,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				}`}
 			>
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					{/* Navbar content container with responsive padding */}
 					<div className="flex h-16 justify-between items-center">
+						{/* Logo section - visible on all screens */}
 						<motion.div
 							className="flex-shrink-0"
 							initial={{ opacity: 0, x: -20 }}
@@ -77,6 +84,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 							</Link>
 						</motion.div>
 
+						{/* Desktop navigation - hidden on mobile */}
 						<div className="hidden md:flex flex-1 justify-center">
 							<motion.div
 								className="flex space-x-1 bg-gray-100/80 backdrop-blur-sm rounded-full p-1.5"
@@ -112,6 +120,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 							</motion.div>
 						</div>
 
+						{/* Desktop actions - hidden on mobile */}
 						<motion.div
 							className="hidden md:flex items-center space-x-4"
 							initial={{ opacity: 0, x: 20 }}
@@ -124,10 +133,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 								className="flex items-center space-x-2 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-all duration-200"
 							>
 								<ArrowRightOnRectangleIcon className="h-5 w-5" />
-								<span>Logout</span>
+								<span className="hidden sm:inline">Logout</span>
 							</button>
 						</motion.div>
 
+						{/* Mobile menu button - visible only on mobile */}
 						<div className="flex md:hidden">
 							<button
 								onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -144,7 +154,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					</div>
 				</div>
 
-				{/* Mobile menu */}
+				{/* Mobile menu - animated slide-down panel */}
 				<AnimatePresence>
 					{isMobileMenuOpen && (
 						<motion.div
@@ -154,6 +164,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 							exit={{ opacity: 0, height: 0 }}
 							transition={{ duration: 0.2 }}
 						>
+							{/* Mobile menu content with responsive padding */}
 							<div className="px-2 pt-2 pb-3 space-y-1 bg-white/80 backdrop-blur-md shadow-lg">
 								<MobileNavLink to="/" icon={<HomeIcon className="h-5 w-5" />}>
 									Dashboard
@@ -196,7 +207,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				</AnimatePresence>
 			</nav>
 
-			<main className="mx-auto max-w-7xl pt-24 pb-6 sm:px-6 lg:px-8">
+			{/* Main content area with responsive padding */}
+			<main className="mx-auto max-w-7xl pt-24 pb-6 px-4 sm:px-6 lg:px-8">
 				{children}
 			</main>
 		</div>
