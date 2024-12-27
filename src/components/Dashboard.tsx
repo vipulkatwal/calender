@@ -39,9 +39,9 @@ export default function Dashboard() {
 		const status = getCommunicationStatus(companyId);
 		switch (status) {
 			case "overdue":
-				return "bg-red-50/80";
+				return "bg-red-100/60";
 			case "due":
-				return "bg-amber-50/80";
+				return "bg-amber-100/60";
 			default:
 				return "";
 		}

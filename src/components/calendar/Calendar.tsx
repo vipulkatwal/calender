@@ -138,6 +138,12 @@ export default function Calendar() {
 		}
 	};
 
+	const handleDateClick = (info: { date: Date }) => {
+		setSelectedDate(info.date);
+		setSelectedCompanies([]);
+		setShowCommunicationModal(true);
+	};
+
 	return (
 		<div className="space-y-8">
 			<div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl p-8 shadow-xl">
@@ -184,7 +190,7 @@ export default function Calendar() {
 					].map(({ label, color }) => (
 						<div key={label} className="flex items-center gap-2">
 							<span
-								className={`w-3 h-3 rounded-full ${color} ring-2 ring-offset-2 ring-offset-primary-700 ${color.replace(
+								className={`w-3 h-3 rounded-md ${color} ${color.replace(
 									"bg",
 									"ring"
 								)}/30`}
@@ -210,33 +216,20 @@ export default function Calendar() {
 						}}
 						height="800px"
 						eventClick={handleEventClick}
-						dateClick={(info) => {
-							setSelectedDate(new Date(info.dateStr));
-							setSelectedCompanies([]);
-							setShowCommunicationModal(true);
-						}}
+						dateClick={handleDateClick}
 						eventContent={(eventInfo) => (
 							<motion.div
-								whileHover={{ scale: 1.02 }}
-								className="w-full h-full"
+								className="w-full px-2 py-1 rounded-md text-xs font-medium"
 								style={{
 									backgroundColor: eventInfo.backgroundColor,
-									borderColor: eventInfo.borderColor,
 									color: eventInfo.textColor,
-									padding: "0.25rem 0.5rem",
-									borderRadius: "0.375rem",
-									boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
 								}}
-								title={
-									eventInfo.event.extendedProps.notes || "Click to schedule"
-								}
 							>
-								<div className="text-xs font-medium truncate">
-									{eventInfo.event.title}
-								</div>
+								{eventInfo.event.title}
 							</motion.div>
 						)}
-						eventClassNames="!border-0 !bg-transparent !p-1"
+						slotEventOverlap={false}
+						eventDisplay="list-item"
 					/>
 				</div>
 			</div>

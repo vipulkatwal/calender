@@ -34,16 +34,36 @@ const styles: Record<
 	CommunicationType | "default",
 	{ background: string; text: string; border: string }
 > = {
-	"LinkedIn Post": { background: "blue", text: "white", border: "darkblue" },
-	"LinkedIn Message": {
-		background: "green",
+	"LinkedIn Post": {
+		background: "rgba(59, 130, 246, 0.8)",
 		text: "white",
-		border: "darkgreen",
+		border: "rgb(37, 99, 235)",
 	},
-	Email: { background: "purple", text: "white", border: "darkpurple" },
-	"Phone Call": { background: "pink", text: "white", border: "darkpink" },
-	Other: { background: "gray", text: "white", border: "darkgray" },
-	default: { background: "lightgray", text: "black", border: "gray" },
+	"LinkedIn Message": {
+		background: "rgba(16, 185, 129, 0.8)",
+		text: "white",
+		border: "rgb(5, 150, 105)",
+	},
+	Email: {
+		background: "rgba(139, 92, 246, 0.8)",
+		text: "white",
+		border: "rgb(124, 58, 237)",
+	},
+	"Phone Call": {
+		background: "rgba(236, 72, 153, 0.8)",
+		text: "white",
+		border: "rgb(219, 39, 119)",
+	},
+	Other: {
+		background: "rgba(107, 114, 128, 0.8)",
+		text: "white",
+		border: "rgb(75, 85, 99)",
+	},
+	default: {
+		background: "rgba(107, 114, 128, 0.8)",
+		text: "white",
+		border: "rgb(75, 85, 99)",
+	},
 };
 
 export default function Reports() {
