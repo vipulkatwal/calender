@@ -355,3 +355,7 @@
 	content: "";
 	@apply absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white to-transparent pointer-events-none;
 }
+
+.drop-shadow-glow {
+	filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}
