@@ -19,7 +19,6 @@ A modern React application for managing and tracking company communications with
 - 🎯 Interactive calendar interface using FullCalendar
 - 🎨 Color-coded communication types
 - 🖱️ Click-to-schedule functionality
-- 🔄 Drag-and-drop event handling
 - 📊 Visual indicators for communication density
 
 ### 3. Communication Management 💬
@@ -123,7 +122,7 @@ git clone https://github.com/vipulkatwal/calender.git
 2. Install dependencies:
 
 ```bash
-cd company-communication-tracker
+cd calender
 npm install
 ```
 

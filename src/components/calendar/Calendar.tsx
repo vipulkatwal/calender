@@ -146,24 +146,30 @@ export default function Calendar() {
 
 	return (
 		<div className="space-y-8">
-			<div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl p-8 shadow-xl">
-				<div className="sm:flex sm:items-center sm:justify-between">
+			<div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl p-4 sm:p-8 shadow-2xl backdrop-blur-sm border border-white/10">
+				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 					<div className="text-white">
-						<h1 className="text-2xl font-semibold">Calendar</h1>
-						<p className="mt-2 text-primary-100">
+						<h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
+							Calendar
+						</h1>
+						<p className="mt-2 text-sm sm:text-base text-primary-100/90">
 							View and manage communications schedule
 						</p>
 					</div>
-					<div className="mt-4 sm:mt-0 flex items-center gap-4">
+					<div className="flex items-center gap-2">
 						<motion.button
-							whileHover={{ scale: 1.02 }}
+							whileHover={{
+								scale: 1.02,
+								backgroundColor: "rgba(255, 255, 255, 0.15)",
+							}}
 							whileTap={{ scale: 0.98 }}
 							onClick={() => setShowCommunicationModal(true)}
-							className="bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20
-									 hover:bg-white/20 transition-all duration-200 flex items-center gap-2"
+							className="w-full sm:w-auto bg-white/10 text-white px-3 sm:px-4 py-2 rounded-lg
+									 border border-white/20 backdrop-blur-sm shadow-lg
+									 transition-all duration-200 flex items-center gap-2 text-sm sm:text-base"
 						>
 							<svg
-								className="h-5 w-5"
+								className="h-4 w-4 sm:h-5 sm:w-5"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
@@ -175,12 +181,13 @@ export default function Calendar() {
 									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
 								/>
 							</svg>
-							Schedule Communication
+							<span className="hidden sm:inline">Schedule Communication</span>
+							<span className="sm:hidden">Schedule</span>
 						</motion.button>
 					</div>
 				</div>
 
-				<div className="mt-8 flex flex-wrap gap-6">
+				<div className="mt-4 sm:mt-8 grid grid-cols-2 sm:flex flex-wrap gap-3 sm:gap-6">
 					{[
 						{ label: "LinkedIn Post", color: "bg-blue-500" },
 						{ label: "LinkedIn Message", color: "bg-green-500" },
@@ -190,47 +197,67 @@ export default function Calendar() {
 					].map(({ label, color }) => (
 						<div key={label} className="flex items-center gap-2">
 							<span
-								className={`w-3 h-3 rounded-md ${color} ${color.replace(
+								className={`w-2 h-2 sm:w-3 sm:h-3 rounded-md ${color} shadow-lg ${color.replace(
 									"bg",
 									"ring"
-								)}/30`}
+								)}/30 ring-2`}
 							/>
-							<span className="text-sm font-medium text-white/90">{label}</span>
+							<span className="text-xs sm:text-sm font-medium text-white/90">
+								{label}
+							</span>
 						</div>
 					))}
 				</div>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
-				<div className="p-6">
-					<FullCalendar
-						plugins={[dayGridPlugin, interactionPlugin]}
-						initialView="dayGridMonth"
-						events={events.filter(
-							(event): event is NonNullable<typeof event> => event !== null
-						)}
-						headerToolbar={{
-							left: "prev,next today",
-							center: "title",
-							right: "",
-						}}
-						height="800px"
-						eventClick={handleEventClick}
-						dateClick={handleDateClick}
-						eventContent={(eventInfo) => (
-							<motion.div
-								className="w-full px-2 py-1 rounded-md text-xs font-medium"
-								style={{
-									backgroundColor: eventInfo.backgroundColor,
-									color: eventInfo.textColor,
-								}}
-							>
-								{eventInfo.event.title}
-							</motion.div>
-						)}
-						slotEventOverlap={false}
-						eventDisplay="list-item"
-					/>
+			<div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100/50 backdrop-blur-sm">
+				<div className="p-2 sm:p-6">
+					<div className="premium-calendar">
+						<FullCalendar
+							plugins={[dayGridPlugin, interactionPlugin]}
+							initialView="dayGridMonth"
+							events={events.filter(
+								(event): event is NonNullable<typeof event> => event !== null
+							)}
+							headerToolbar={{
+								left: "title",
+								right: "prev,next today",
+							}}
+							height="auto"
+							contentHeight="auto"
+							aspectRatio={1.35}
+							eventClick={handleEventClick}
+							dateClick={handleDateClick}
+							eventContent={(eventInfo) => (
+								<motion.div
+									whileHover={{ scale: 1.02 }}
+									className="w-full px-1 sm:px-2 py-0.5 sm:py-1 rounded-md text-[10px] sm:text-xs
+											 font-medium truncate shadow-sm border border-black/5"
+									style={{
+										backgroundColor: eventInfo.backgroundColor,
+										color: eventInfo.textColor,
+									}}
+								>
+									{eventInfo.event.title}
+								</motion.div>
+							)}
+							slotEventOverlap={false}
+							eventDisplay="list-item"
+							views={{
+								dayGridMonth: {
+									titleFormat: { month: "long", year: "numeric" },
+									dayHeaderFormat: { weekday: "short" },
+								},
+							}}
+							themeSystem="standard"
+							dayMaxEvents={3}
+							moreLinkContent={(args) => (
+								<div className="text-xs text-blue-600 font-medium">
+									+{args.num} more
+								</div>
+							)}
+						/>
+					</div>
 				</div>
 			</div>
 

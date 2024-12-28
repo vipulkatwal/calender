@@ -110,7 +110,7 @@ export default function CommunicationModal({
 								exit={{ opacity: 0, y: -20 }}
 								className="p-6"
 							>
-								<div className="space-y-4">
+								<div className="company-select-list relative">
 									{companies.map((company) => (
 										<label
 											key={company.id}

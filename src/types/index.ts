@@ -14,6 +14,7 @@ export interface Company {
 	phoneNumbers: string[];
 	comments: string;
 	communicationPeriodicity: number;
+	lastCommunication?: Date; // Add this line
 }
 
 export enum CommunicationType {
