@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -11,10 +12,12 @@ import { toast } from "react-toastify";
 // import { EventInput } from "@fullcalendar/core";
 
 export default function Calendar() {
+	// State for managing selected date, companies and modal visibility
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 	const [showCommunicationModal, setShowCommunicationModal] = useState(false);
 
+	// Get communications and companies data from Redux store
 	const communications = useSelector(
 		(state: RootState) => state.communications.communications
 	);
@@ -22,6 +25,11 @@ export default function Calendar() {
 		(state: RootState) => state.companies.companies
 	);
 
+	/**
+	 * Returns color scheme for different types of communications
+	 * @param type - The type of communication
+	 * @returns Object containing background, border and optional text colors
+	 */
 	function getEventColor(type: string) {
 		const colors: Record<
 			string,
@@ -57,9 +65,9 @@ export default function Calendar() {
 		return colors[type] || colors.default;
 	}
 
-	// Map communications to calendar events
+	// Combine regular communications and upcoming due dates into calendar events
 	const events = [
-		// Regular communications
+		// Map existing communications to calendar events
 		...communications.map((comm) => {
 			const company = companies.find((c) => c.id === comm.companyId);
 			const colors = getEventColor(
@@ -85,9 +93,10 @@ export default function Calendar() {
 				},
 			};
 		}),
-		// Upcoming/Due communications
+		// Generate upcoming due communications based on company periodicity
 		...companies
 			.map((company) => {
+				// Find the most recent communication for this company
 				const lastComm = communications
 					.filter((c) => c.companyId === company.id)
 					.sort(
@@ -118,6 +127,11 @@ export default function Calendar() {
 			.filter(Boolean),
 	];
 
+	/**
+	 * Handle click events on calendar events
+	 * Shows communication modal for upcoming events
+	 * Shows toast notification for past events
+	 */
 	const handleEventClick = (info: any) => {
 		const { event } = info;
 		if (event.extendedProps.isUpcoming) {
@@ -138,6 +152,10 @@ export default function Calendar() {
 		}
 	};
 
+	/**
+	 * Handle clicks on calendar dates
+	 * Opens communication modal for the selected date
+	 */
 	const handleDateClick = (info: { date: Date }) => {
 		setSelectedDate(info.date);
 		setSelectedCompanies([]);
@@ -146,6 +164,7 @@ export default function Calendar() {
 
 	return (
 		<div className="space-y-8">
+			{/* Header section with title and add button */}
 			<div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl p-4 sm:p-8 shadow-2xl backdrop-blur-sm border border-white/10">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 					<div className="text-white">
@@ -187,6 +206,7 @@ export default function Calendar() {
 					</div>
 				</div>
 
+				{/* Legend for event types */}
 				<div className="mt-4 sm:mt-8 grid grid-cols-2 sm:flex flex-wrap gap-3 sm:gap-6">
 					{[
 						{ label: "LinkedIn Post", color: "bg-blue-500" },
@@ -210,6 +230,7 @@ export default function Calendar() {
 				</div>
 			</div>
 
+			{/* Calendar container */}
 			<div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100/50 backdrop-blur-sm">
 				<div className="p-2 sm:p-6">
 					<div className="premium-calendar">
@@ -261,6 +282,7 @@ export default function Calendar() {
 				</div>
 			</div>
 
+			{/* Communication modal */}
 			<CommunicationModal
 				isOpen={showCommunicationModal}
 				onClose={() => {

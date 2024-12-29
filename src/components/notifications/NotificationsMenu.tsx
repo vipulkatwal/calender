@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -21,21 +22,28 @@ import {
  * Displays notifications in a dropdown panel with responsive design
  */
 export default function NotificationsMenu() {
+	// State to control dropdown visibility
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
+
+	// Get notifications from Redux store
 	const notifications = useSelector(
 		(state: RootState) => state.notifications.notifications
 	);
+	// Calculate number of unread notifications
 	const unreadCount = notifications.filter((n) => !n.isRead).length;
 
+	// Handler to mark all notifications as read
 	const handleMarkAllAsRead = () => {
 		dispatch(markAllAsRead());
 	};
 
+	// Handler to clear all notifications
 	const handleClearAll = () => {
 		dispatch(clearNotifications());
 	};
 
+	// Helper function to render appropriate icon based on notification type
 	const getNotificationIcon = (type: string) => {
 		switch (type) {
 			case "overdue":
@@ -61,7 +69,7 @@ export default function NotificationsMenu() {
 
 	return (
 		<div className="relative">
-			{/* Bell button with new animation */}
+			{/* Notification bell button with animation */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				className="relative rounded-full p-2.5 text-gray-700 hover:bg-gray-100/80 hover:text-primary-600 transition-all duration-200"
@@ -73,6 +81,7 @@ export default function NotificationsMenu() {
 						<BellIcon className="h-6 w-6" />
 					)}
 				</motion.div>
+				{/* Notification count badge */}
 				{unreadCount > 0 && (
 					<motion.span
 						initial={{ scale: 0 }}
@@ -84,14 +93,17 @@ export default function NotificationsMenu() {
 				)}
 			</button>
 
+			{/* Dropdown menu with animation */}
 			<AnimatePresence>
 				{isOpen && (
 					<>
+						{/* Backdrop overlay */}
 						<div
 							className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]"
 							onClick={() => setIsOpen(false)}
 						/>
 
+						{/* Notifications panel */}
 						<motion.div
 							initial={{ opacity: 0, scale: 0.95, y: -20 }}
 							animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -100,7 +112,7 @@ export default function NotificationsMenu() {
 							className="fixed sm:absolute right-2 left-2 sm:left-auto sm:right-0 top-20 sm:top-auto sm:mt-3 sm:w-[420px] origin-top z-[70]"
 						>
 							<div className="rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden">
-								{/* Modern header design */}
+								{/* Header section with actions */}
 								<div className="relative px-4 py-5 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 bg-[size:200%] animate-gradient">
 									<div className="flex items-center justify-between">
 										<div>
@@ -129,9 +141,10 @@ export default function NotificationsMenu() {
 									</div>
 								</div>
 
-								{/* Enhanced notifications list */}
+								{/* Scrollable notifications list */}
 								<div className="divide-y divide-gray-100 max-h-[calc(100vh-10rem)] overflow-y-auto">
 									{notifications.length === 0 ? (
+										// Empty state
 										<div className="p-12 text-center">
 											<div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-4">
 												<BellIcon className="h-8 w-8 text-gray-400" />
@@ -144,6 +157,7 @@ export default function NotificationsMenu() {
 											</p>
 										</div>
 									) : (
+										// List of notifications
 										notifications.map((notification) => (
 											<motion.div
 												key={notification.id}
@@ -178,6 +192,7 @@ export default function NotificationsMenu() {
 														<p className="mt-1 text-sm text-gray-600 line-clamp-2">
 															{notification.message}
 														</p>
+														{/* Mark as read button for unread notifications */}
 														{!notification.isRead && (
 															<button
 																onClick={() =>

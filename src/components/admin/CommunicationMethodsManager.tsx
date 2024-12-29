@@ -16,11 +16,14 @@ import { toast } from "react-toastify";
  */
 export default function CommunicationMethodsManager() {
 	const dispatch = useDispatch();
+	// Get communication methods from Redux store
 	const methods = useSelector(
 		(state: RootState) => state.communicationMethods.methods
 	);
+	// State for controlling form visibility and editing mode
 	const [showForm, setShowForm] = useState(false);
 	const [editingMethod, setEditingMethod] = useState<any>(null);
+	// Form data state with default values
 	const [formData, setFormData] = useState({
 		name: "",
 		description: "",
@@ -28,13 +31,15 @@ export default function CommunicationMethodsManager() {
 		isMandatory: false,
 	});
 
-	// Form submission handler
+	// Form submission handler for both adding and updating methods
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (editingMethod) {
+			// Update existing method
 			dispatch(updateMethod({ ...formData, id: editingMethod.id }));
 			toast.success("Method updated successfully");
 		} else {
+			// Add new method with unique ID
 			dispatch(
 				addMethod({
 					...formData,
@@ -43,6 +48,7 @@ export default function CommunicationMethodsManager() {
 			);
 			toast.success("Method added successfully");
 		}
+		// Reset form state after submission
 		setShowForm(false);
 		setEditingMethod(null);
 		setFormData({
@@ -53,7 +59,7 @@ export default function CommunicationMethodsManager() {
 		});
 	};
 
-	// Delete method handler with confirmation
+	// Delete method handler with confirmation dialog
 	const handleDelete = (method: any) => {
 		if (confirm("Are you sure you want to delete this method?")) {
 			dispatch(deleteMethod(method.id));
@@ -61,7 +67,7 @@ export default function CommunicationMethodsManager() {
 		}
 	};
 
-	// Reorder methods handler
+	// Handler for reordering methods with updated sequence numbers
 	const handleReorder = (newOrder: any[]) => {
 		const updatedMethods = newOrder.map((method, index) => ({
 			...method,
@@ -73,7 +79,7 @@ export default function CommunicationMethodsManager() {
 	return (
 		// Main container with responsive padding
 		<div className="space-y-6 px-4 sm:px-6 lg:px-8">
-			{/* Header section with responsive button placement */}
+			{/* Header section with "Add Method" button */}
 			<div className="flex justify-end sm:justify-end">
 				<motion.button
 					whileHover={{ scale: 1.02 }}
@@ -85,7 +91,7 @@ export default function CommunicationMethodsManager() {
 				</motion.button>
 			</div>
 
-			{/* Reorderable list with responsive spacing */}
+			{/* Reorderable list of communication methods */}
 			<Reorder.Group
 				axis="y"
 				values={methods}
@@ -98,6 +104,7 @@ export default function CommunicationMethodsManager() {
 						value={method}
 						className="cursor-move focus:outline-none"
 					>
+						{/* Method card with animation */}
 						<motion.div
 							layout
 							initial={{ opacity: 0, y: 20 }}
@@ -105,7 +112,7 @@ export default function CommunicationMethodsManager() {
 							exit={{ opacity: 0, y: -20 }}
 							className="group relative bg-white rounded-xl shadow-soft hover:shadow-lg transition-all duration-300"
 						>
-							{/* Action buttons with responsive positioning */}
+							{/* Edit and Delete buttons */}
 							<div className="absolute right-2 sm:right-4 top-2 sm:top-4 flex space-x-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 								<motion.button
 									whileHover={{ scale: 1.1 }}
@@ -153,13 +160,14 @@ export default function CommunicationMethodsManager() {
 								</motion.button>
 							</div>
 
-							{/* Card content with responsive padding and typography */}
+							{/* Method details display */}
 							<div className="p-4 sm:p-6">
 								<div className="flex items-center mb-3 sm:mb-4">
 									<div className="flex-1 min-w-0">
 										<h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 truncate">
 											{method.name}
 										</h3>
+										{/* Method badges (sequence and mandatory status) */}
 										<div className="flex flex-wrap items-center gap-2 sm:gap-3">
 											<div className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
 												Sequence: {method.sequence}
@@ -171,6 +179,7 @@ export default function CommunicationMethodsManager() {
 											)}
 										</div>
 									</div>
+									{/* Drag handle icon */}
 									<div className="text-gray-400 ml-4">
 										<svg
 											className="h-5 w-5 sm:h-6 sm:w-6"
@@ -196,11 +205,12 @@ export default function CommunicationMethodsManager() {
 				))}
 			</Reorder.Group>
 
-			{/* Modal form with responsive layout */}
+			{/* Modal form for adding/editing methods */}
 			<AnimatePresence>
 				{showForm && (
 					<div className="fixed inset-0 z-10 overflow-y-auto">
 						<div className="flex min-h-full items-end sm:items-center justify-center p-4 text-center sm:p-0">
+							{/* Modal backdrop with click-away handler */}
 							<motion.div
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
@@ -209,6 +219,7 @@ export default function CommunicationMethodsManager() {
 								onClick={() => setShowForm(false)}
 							/>
 
+							{/* Modal content with animation */}
 							<motion.div
 								initial={{ opacity: 0, scale: 0.9 }}
 								animate={{ opacity: 1, scale: 1 }}
@@ -216,6 +227,7 @@ export default function CommunicationMethodsManager() {
 								className="relative transform overflow-hidden rounded-lg bg-white w-full sm:max-w-lg mx-4 sm:mx-auto"
 							>
 								<form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
+									{/* Method name input */}
 									<div>
 										<label className="label">Method Name</label>
 										<input
@@ -230,6 +242,7 @@ export default function CommunicationMethodsManager() {
 										/>
 									</div>
 
+									{/* Method description textarea */}
 									<div>
 										<label className="label">Description</label>
 										<textarea
@@ -247,6 +260,7 @@ export default function CommunicationMethodsManager() {
 										/>
 									</div>
 
+									{/* Sequence number input */}
 									<div>
 										<label className="label">Sequence</label>
 										<input
@@ -264,6 +278,7 @@ export default function CommunicationMethodsManager() {
 										/>
 									</div>
 
+									{/* Mandatory method checkbox */}
 									<div className="flex items-center">
 										<input
 											type="checkbox"
@@ -285,7 +300,7 @@ export default function CommunicationMethodsManager() {
 										</label>
 									</div>
 
-									{/* Form actions with responsive spacing */}
+									{/* Form action buttons */}
 									<div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
 										<motion.button
 											type="button"

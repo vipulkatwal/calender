@@ -1,8 +1,13 @@
+// Import necessary dependencies for routing and notifications
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// Import authentication related components
 import LoginForm from "./components/auth/LoginForm";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+
+// Import layout and page components
 import Layout from "./components/layout/Layout";
 import Dashboard from "./components/Dashboard";
 import Calendar from "./components/calendar/Calendar";
@@ -12,6 +17,7 @@ import Reports from "./components/reports/Reports";
 export default function App() {
 	return (
 		<Router>
+			{/* Global toast notification container */}
 			<ToastContainer
 				position="bottom-right"
 				autoClose={4000}
@@ -24,7 +30,10 @@ export default function App() {
 				theme="light"
 			/>
 			<Routes>
+				{/* Public route */}
 				<Route path="/login" element={<LoginForm />} />
+
+				{/* Protected routes - require authentication */}
 				<Route
 					path="/"
 					element={
@@ -45,6 +54,8 @@ export default function App() {
 						</ProtectedRoute>
 					}
 				/>
+
+				{/* Admin-only routes */}
 				<Route
 					path="/admin"
 					element={

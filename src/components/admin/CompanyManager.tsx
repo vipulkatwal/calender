@@ -10,11 +10,18 @@ import { Company } from "../../types";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 
+/**
+ * CompanyManager component handles the display and management of company data
+ * including adding, editing, and deleting companies
+ */
 export default function CompanyManager() {
 	const dispatch = useDispatch();
+	// Get companies data from Redux store
 	const companies = useSelector(
 		(state: RootState) => state.companies.companies
 	);
+
+	// State for managing form visibility and data
 	const [showForm, setShowForm] = useState(false);
 	const [editingCompany, setEditingCompany] = useState<Company | null>(null);
 	const [formData, setFormData] = useState<Omit<Company, "id">>({
@@ -24,12 +31,16 @@ export default function CompanyManager() {
 		emails: [""],
 		phoneNumbers: [""],
 		comments: "",
-		communicationPeriodicity: 14,
+		communicationPeriodicity: 14, // Default to 14 days
 	});
 
+	/**
+	 * Handles form submission for both adding and updating companies
+	 */
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (editingCompany) {
+			// Update existing company
 			dispatch(
 				updateCompany({
 					...formData,
@@ -38,6 +49,7 @@ export default function CompanyManager() {
 			);
 			toast.success("Company updated successfully");
 		} else {
+			// Add new company
 			dispatch(
 				addCompany({
 					...formData,
@@ -46,6 +58,7 @@ export default function CompanyManager() {
 			);
 			toast.success("Company added successfully");
 		}
+		// Reset form state
 		setShowForm(false);
 		setEditingCompany(null);
 		setFormData({
@@ -59,6 +72,9 @@ export default function CompanyManager() {
 		});
 	};
 
+	/**
+	 * Handles company deletion with confirmation
+	 */
 	const handleDelete = (company: Company) => {
 		if (confirm("Are you sure you want to delete this company?")) {
 			dispatch(deleteCompany(company.id));
@@ -68,6 +84,7 @@ export default function CompanyManager() {
 
 	return (
 		<div className="space-y-6">
+			{/* Add Company Button */}
 			<div className="flex justify-end">
 				<motion.button
 					whileHover={{ scale: 1.02 }}
@@ -79,6 +96,7 @@ export default function CompanyManager() {
 				</motion.button>
 			</div>
 
+			{/* Company Cards Grid */}
 			<div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 				<AnimatePresence>
 					{companies.map((company) => (
@@ -92,6 +110,7 @@ export default function CompanyManager() {
 						>
 							{/* Card Header with Actions */}
 							<div className="absolute right-4 top-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+								{/* Edit Button */}
 								<motion.button
 									whileHover={{ scale: 1.1 }}
 									whileTap={{ scale: 0.9 }}
@@ -116,6 +135,7 @@ export default function CompanyManager() {
 										/>
 									</svg>
 								</motion.button>
+								{/* Delete Button */}
 								<motion.button
 									whileHover={{ scale: 1.1 }}
 									whileTap={{ scale: 0.9 }}
@@ -140,6 +160,7 @@ export default function CompanyManager() {
 
 							{/* Card Content */}
 							<div className="p-6">
+								{/* Company Name and Location */}
 								<div className="mb-6">
 									<h3 className="text-lg font-semibold text-gray-900 mb-1">
 										{company.name}
@@ -149,7 +170,9 @@ export default function CompanyManager() {
 									</div>
 								</div>
 
+								{/* Company Details */}
 								<div className="space-y-4">
+									{/* LinkedIn Profile */}
 									<div className="flex items-center text-sm">
 										<div className="w-5 h-5 mr-3 text-primary-600">
 											<svg
@@ -175,6 +198,7 @@ export default function CompanyManager() {
 										</a>
 									</div>
 
+									{/* Email Addresses */}
 									<div className="flex items-start text-sm">
 										<div className="w-5 h-5 mr-3 text-primary-600">
 											<svg
@@ -199,6 +223,7 @@ export default function CompanyManager() {
 										</div>
 									</div>
 
+									{/* Phone Numbers */}
 									<div className="flex items-start text-sm">
 										<div className="w-5 h-5 mr-3 text-primary-600">
 											<svg
@@ -223,6 +248,7 @@ export default function CompanyManager() {
 										</div>
 									</div>
 
+									{/* Communication Periodicity */}
 									<div className="flex items-start text-sm">
 										<div className="w-5 h-5 mr-3 text-primary-600">
 											<svg
@@ -244,6 +270,7 @@ export default function CompanyManager() {
 										</div>
 									</div>
 
+									{/* Comments Section */}
 									{company.comments && (
 										<div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
 											{company.comments}
@@ -261,6 +288,7 @@ export default function CompanyManager() {
 				{showForm && (
 					<div className="fixed inset-0 z-10 overflow-y-auto">
 						<div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+							{/* Modal Backdrop */}
 							<motion.div
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
@@ -269,6 +297,7 @@ export default function CompanyManager() {
 								onClick={() => setShowForm(false)}
 							/>
 
+							{/* Modal Content */}
 							<motion.div
 								initial={{ opacity: 0, scale: 0.9 }}
 								animate={{ opacity: 1, scale: 1 }}
@@ -276,6 +305,7 @@ export default function CompanyManager() {
 								className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 							>
 								<form onSubmit={handleSubmit} className="space-y-4">
+									{/* Company Name Field */}
 									<div>
 										<label className="label">Company Name</label>
 										<input
@@ -290,6 +320,7 @@ export default function CompanyManager() {
 										/>
 									</div>
 
+									{/* Location Field */}
 									<div>
 										<label className="label">Location</label>
 										<input
@@ -304,6 +335,7 @@ export default function CompanyManager() {
 										/>
 									</div>
 
+									{/* LinkedIn Profile Field */}
 									<div>
 										<label className="label">LinkedIn Profile</label>
 										<input
@@ -321,6 +353,7 @@ export default function CompanyManager() {
 										/>
 									</div>
 
+									{/* Email Addresses Fields */}
 									<div>
 										<label className="label">Email Addresses</label>
 										<div className="space-y-2">
@@ -385,6 +418,7 @@ export default function CompanyManager() {
 										</div>
 									</div>
 
+									{/* Phone Numbers Fields */}
 									<div>
 										<label className="label">Phone Numbers</label>
 										<div className="space-y-2">
@@ -455,6 +489,7 @@ export default function CompanyManager() {
 										</div>
 									</div>
 
+									{/* Communication Periodicity Field */}
 									<div>
 										<label className="label">
 											Communication Periodicity (days)
@@ -475,6 +510,7 @@ export default function CompanyManager() {
 										/>
 									</div>
 
+									{/* Comments Field */}
 									<div>
 										<label className="label">Comments</label>
 										<textarea
@@ -488,6 +524,7 @@ export default function CompanyManager() {
 										/>
 									</div>
 
+									{/* Form Actions */}
 									<div className="flex justify-end gap-3">
 										<motion.button
 											type="button"

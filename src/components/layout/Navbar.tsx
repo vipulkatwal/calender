@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +16,12 @@ import {
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 
+/**
+ * Main navigation component that handles responsive navigation,
+ * user authentication state, and mobile menu functionality
+ */
 export default function Navbar() {
+	// State for mobile menu and scroll position
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [isScrolled, setIsScrolled] = useState(false);
 	const location = useLocation();
@@ -23,16 +29,19 @@ export default function Navbar() {
 	const dispatch = useDispatch();
 	const user = useSelector((state: RootState) => state.user.currentUser);
 
+	// Add scroll event listener to handle navbar transparency
 	useEffect(() => {
 		const handleScroll = () => setIsScrolled(window.scrollY > 0);
 		window.addEventListener("scroll", handleScroll);
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
+	// Close mobile menu when route changes
 	useEffect(() => {
 		setIsMobileMenuOpen(false);
 	}, [location.pathname]);
 
+	// Handle user logout
 	const handleLogout = () => {
 		dispatch(clearUser());
 		navigate("/login");
@@ -48,7 +57,7 @@ export default function Navbar() {
 		>
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 justify-between items-center">
-					{/* Logo */}
+					{/* Logo and brand name */}
 					<motion.div
 						className="flex-shrink-0"
 						initial={{ opacity: 0, x: -20 }}
@@ -71,7 +80,7 @@ export default function Navbar() {
 						</Link>
 					</motion.div>
 
-					{/* Desktop Navigation */}
+					{/* Desktop Navigation Links */}
 					<div className="hidden md:flex flex-1 justify-center">
 						<motion.div
 							className="flex space-x-1 bg-gray-100/80 backdrop-blur-sm rounded-full p-1.5"
@@ -88,6 +97,7 @@ export default function Navbar() {
 							>
 								Calendar
 							</NavLink>
+							{/* Admin-only navigation links */}
 							{user?.role === "admin" && (
 								<>
 									<NavLink
@@ -107,7 +117,7 @@ export default function Navbar() {
 						</motion.div>
 					</div>
 
-					{/* Desktop Actions */}
+					{/* Desktop Action Buttons */}
 					<motion.div
 						className="hidden md:flex items-center space-x-4"
 						initial={{ opacity: 0, x: 20 }}
@@ -124,7 +134,7 @@ export default function Navbar() {
 						</button>
 					</motion.div>
 
-					{/* Mobile Menu Button */}
+					{/* Mobile Menu Toggle Button */}
 					<div className="flex md:hidden">
 						<button
 							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -140,7 +150,7 @@ export default function Navbar() {
 					</div>
 				</div>
 
-				{/* Mobile Menu */}
+				{/* Mobile Menu Panel */}
 				<AnimatePresence>
 					{isMobileMenuOpen && (
 						<motion.div
@@ -160,6 +170,7 @@ export default function Navbar() {
 								>
 									Calendar
 								</MobileNavLink>
+								{/* Admin-only mobile navigation links */}
 								{user?.role === "admin" && (
 									<>
 										<MobileNavLink
@@ -195,6 +206,9 @@ export default function Navbar() {
 	);
 }
 
+/**
+ * Desktop navigation link component with active state styling
+ */
 function NavLink({
 	to,
 	icon,
@@ -222,6 +236,9 @@ function NavLink({
 	);
 }
 
+/**
+ * Mobile navigation link component with active state styling
+ */
 function MobileNavLink({
 	to,
 	icon,

@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,7 @@ import { format } from "date-fns";
 import { showToast } from "../common/Toast";
 import { CommunicationType } from "../../types";
 
+// Props interface for CommunicationModal component
 interface CommunicationModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -16,6 +18,10 @@ interface CommunicationModalProps {
 	onCommunicationAdded?: () => void;
 }
 
+/**
+ * Modal component for logging communications with companies
+ * Handles both single and bulk communication logging
+ */
 export default function CommunicationModal({
 	isOpen,
 	onClose,
@@ -24,9 +30,12 @@ export default function CommunicationModal({
 	onCommunicationAdded,
 }: CommunicationModalProps) {
 	const dispatch = useDispatch();
+	// State for controlling modal steps (company selection vs details entry)
 	const [step, setStep] = useState<"company" | "details">("company");
 	const [selectedCompanyIds, setSelectedCompanyIds] =
 		useState<string[]>(selectedCompanies);
+
+	// Get communication methods and companies from Redux store
 	const methods = useSelector(
 		(state: RootState) => state.communicationMethods.methods
 	);
@@ -34,19 +43,25 @@ export default function CommunicationModal({
 		(state: RootState) => state.companies.companies
 	);
 
+	// Update selected companies when prop changes
 	useEffect(() => {
 		setSelectedCompanyIds(selectedCompanies);
 	}, [selectedCompanies]);
 
+	// Form data state for communication details
 	const [formData, setFormData] = useState({
 		type: "",
 		notes: "",
 		date: initialDate || format(new Date(), "yyyy-MM-dd"),
 	});
 
+	/**
+	 * Handles form submission and creates new communication records
+	 */
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		// Create communication records for each selected company
 		const newCommunications = selectedCompanyIds.map((companyId) => ({
 			id: crypto.randomUUID(),
 			companyId,
@@ -57,10 +72,12 @@ export default function CommunicationModal({
 			notes: formData.notes,
 		}));
 
+		// Dispatch actions to add communications
 		newCommunications.forEach((comm) => {
 			dispatch(addCommunication(comm));
 		});
 
+		// Show success message
 		showToast.success(
 			`Communication${
 				selectedCompanyIds.length > 1 ? "s" : ""
@@ -74,6 +91,9 @@ export default function CommunicationModal({
 		handleClose();
 	};
 
+	/**
+	 * Resets modal state and closes it
+	 */
 	const handleClose = () => {
 		setStep("company");
 		setSelectedCompanyIds([]);
@@ -87,9 +107,13 @@ export default function CommunicationModal({
 
 	return (
 		<Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+			{/* Modal backdrop */}
 			<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+			{/* Modal container */}
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<Dialog.Panel className="mx-auto max-w-lg w-full rounded-xl bg-white shadow-xl">
+					{/* Modal header */}
 					<div className="p-6 border-b border-gray-100">
 						<Dialog.Title className="text-lg font-semibold text-gray-900">
 							{step === "company" ? "Select Company" : "Log Communication"}
@@ -101,8 +125,10 @@ export default function CommunicationModal({
 						</Dialog.Description>
 					</div>
 
+					{/* Modal content with animation */}
 					<AnimatePresence mode="wait">
 						{step === "company" ? (
+							// Company selection step
 							<motion.div
 								key="company-selection"
 								initial={{ opacity: 0, y: 20 }}
@@ -142,6 +168,7 @@ export default function CommunicationModal({
 									))}
 								</div>
 
+								{/* Navigation buttons */}
 								<div className="mt-6 flex justify-end gap-3">
 									<button onClick={handleClose} className="btn-secondary">
 										Cancel
@@ -156,6 +183,7 @@ export default function CommunicationModal({
 								</div>
 							</motion.div>
 						) : (
+							// Communication details form step
 							<motion.form
 								key="communication-details"
 								initial={{ opacity: 0, y: 20 }}
@@ -164,6 +192,7 @@ export default function CommunicationModal({
 								onSubmit={handleSubmit}
 								className="p-6 space-y-6"
 							>
+								{/* Communication type selection */}
 								<div>
 									<label className="label">Communication Type</label>
 									<select
@@ -183,6 +212,7 @@ export default function CommunicationModal({
 									</select>
 								</div>
 
+								{/* Date selection */}
 								<div>
 									<label className="label">Date</label>
 									<input
@@ -196,6 +226,7 @@ export default function CommunicationModal({
 									/>
 								</div>
 
+								{/* Notes input */}
 								<div>
 									<label className="label">Notes</label>
 									<textarea
@@ -210,6 +241,7 @@ export default function CommunicationModal({
 									/>
 								</div>
 
+								{/* Form submission buttons */}
 								<div className="flex justify-end gap-3">
 									<button
 										type="button"

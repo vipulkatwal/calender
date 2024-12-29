@@ -3,14 +3,18 @@ import { motion } from "framer-motion";
 import { Company } from "../../types";
 
 interface CompanySelectionModalProps {
-	isOpen: boolean;
-	onClose: () => void;
-	companies: Company[];
-	selectedCompanyIds: string[];
-	onCompanySelect: (companyIds: string[]) => void;
-	onNext: () => void;
+	isOpen: boolean; // Controls modal visibility
+	onClose: () => void; // Handler for closing the modal
+	companies: Company[]; // Array of companies to display
+	selectedCompanyIds: string[]; // IDs of currently selected companies
+	onCompanySelect: (companyIds: string[]) => void; // Handler for company selection changes
+	onNext: () => void; // Handler for proceeding to next step
 }
 
+/**
+ * Modal component for selecting one or more companies
+ * Displays a list of companies with checkboxes and company details
+ */
 export function CompanySelectionModal({
 	isOpen,
 	onClose,
@@ -21,11 +25,13 @@ export function CompanySelectionModal({
 }: CompanySelectionModalProps) {
 	return (
 		<Dialog open={isOpen} onClose={onClose} className="relative z-50">
+			{/* Semi-transparent backdrop */}
 			<div
 				className="fixed inset-0 bg-black/30 backdrop-blur-sm"
 				aria-hidden="true"
 			/>
 
+			{/* Modal container */}
 			<div className="fixed inset-0 flex items-center justify-center p-4">
 				<Dialog.Panel className="w-full max-w-lg bg-white rounded-xl shadow-xl">
 					{/* Header */}
@@ -42,6 +48,7 @@ export function CompanySelectionModal({
 					<div className="p-6">
 						<div className="space-y-3">
 							{companies.map((company) => (
+								// Company card with animation on hover/tap
 								<motion.label
 									key={company.id}
 									className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
@@ -52,6 +59,7 @@ export function CompanySelectionModal({
 									whileHover={{ scale: 1.01 }}
 									whileTap={{ scale: 0.99 }}
 								>
+									{/* Selection checkbox */}
 									<input
 										type="checkbox"
 										checked={selectedCompanyIds.includes(company.id)}
@@ -65,6 +73,7 @@ export function CompanySelectionModal({
 										className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
 									/>
 									<div className="ml-4 flex-1">
+										{/* Company name and location */}
 										<div className="flex items-center justify-between">
 											<div className="text-sm font-medium text-gray-900">
 												{company.name}
@@ -73,7 +82,9 @@ export function CompanySelectionModal({
 												{company.location}
 											</div>
 										</div>
+										{/* Contact information */}
 										<div className="mt-1 flex items-center gap-4 text-sm text-gray-500">
+											{/* Email count */}
 											<div className="flex items-center gap-1">
 												<svg
 													className="h-4 w-4"
@@ -91,6 +102,7 @@ export function CompanySelectionModal({
 												{company.emails.length} email
 												{company.emails.length !== 1 ? "s" : ""}
 											</div>
+											{/* Phone number count */}
 											<div className="flex items-center gap-1">
 												<svg
 													className="h-4 w-4"
@@ -115,9 +127,10 @@ export function CompanySelectionModal({
 						</div>
 					</div>
 
-					{/* Footer */}
+					{/* Footer with action buttons */}
 					<div className="p-6 border-t border-gray-100 bg-gray-50/50">
 						<div className="flex justify-end gap-3">
+							{/* Cancel button */}
 							<motion.button
 								whileHover={{ scale: 1.02 }}
 								whileTap={{ scale: 0.98 }}
@@ -126,6 +139,7 @@ export function CompanySelectionModal({
 							>
 								Cancel
 							</motion.button>
+							{/* Next button - disabled if no companies selected */}
 							<motion.button
 								whileHover={{ scale: 1.02 }}
 								whileTap={{ scale: 0.98 }}

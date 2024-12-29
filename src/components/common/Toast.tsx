@@ -1,3 +1,4 @@
+// Import necessary dependencies from react-toastify and heroicons
 import { toast, ToastOptions } from "react-toastify";
 import {
 	CheckCircleIcon,
@@ -5,6 +6,7 @@ import {
 	InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 
+// Default styling options for all toast notifications
 const defaultToastStyle: ToastOptions = {
 	position: "bottom-right",
 	autoClose: 4000,
@@ -16,6 +18,7 @@ const defaultToastStyle: ToastOptions = {
 	className: "!bg-white !rounded-xl !shadow-soft",
 	bodyClassName: "!text-sm !font-medium !text-gray-700",
 	progressClassName: "!bg-primary-500",
+	// Custom close button component
 	closeButton: ({ closeToast }) => (
 		<button
 			onClick={closeToast}
@@ -26,7 +29,9 @@ const defaultToastStyle: ToastOptions = {
 	),
 };
 
+// Export object containing different toast notification methods
 export const showToast = {
+	// Success toast with green styling
 	success: (message: string, options?: ToastOptions) => {
 		toast.success(
 			<div className="flex items-center gap-3">
@@ -41,6 +46,7 @@ export const showToast = {
 		);
 	},
 
+	// Error toast with red styling
 	error: (message: string, options?: ToastOptions) => {
 		toast.error(
 			<div className="flex items-center gap-3">
@@ -55,6 +61,7 @@ export const showToast = {
 		);
 	},
 
+	// Info toast with primary color styling
 	info: (message: string, options?: ToastOptions) => {
 		toast.info(
 			<div className="flex items-center gap-3">
@@ -68,6 +75,8 @@ export const showToast = {
 		);
 	},
 
+	// Loading toast with spinner animation
+	// Returns toast ID for updating/dismissing later
 	loading: (message: string) => {
 		return toast.loading(
 			<div className="flex items-center gap-3">
@@ -76,8 +85,8 @@ export const showToast = {
 			</div>,
 			{
 				...defaultToastStyle,
-				autoClose: false,
-				closeButton: false,
+				autoClose: false, // Loading toasts don't auto-close
+				closeButton: false, // Remove close button for loading state
 			}
 		);
 	},

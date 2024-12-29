@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -20,6 +21,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 
+// Register ChartJS components
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -30,6 +32,7 @@ ChartJS.register(
 	ArcElement
 );
 
+// Define styles for different communication types
 const styles: Record<
 	CommunicationType | "default",
 	{ background: string; text: string; border: string }
@@ -67,11 +70,13 @@ const styles: Record<
 };
 
 export default function Reports() {
+	// State for selected month and company filters
 	const [selectedMonth, setSelectedMonth] = useState(
 		format(new Date(), "yyyy-MM")
 	);
 	const [selectedCompany, setSelectedCompany] = useState<string>("all");
 
+	// Get communications and companies from Redux store
 	const communications = useSelector(
 		(state: RootState) => state.communications.communications
 	);
@@ -92,7 +97,7 @@ export default function Reports() {
 		return isInDateRange && isForCompany;
 	});
 
-	// Prepare data for charts
+	// Prepare data for pie chart showing communication types
 	const communicationsByType = {
 		labels: Object.values(CommunicationType),
 		datasets: [
@@ -113,6 +118,7 @@ export default function Reports() {
 		],
 	};
 
+	// Prepare data for bar chart showing communications by company
 	const communicationsByCompany = {
 		labels: companies.map((c) => c.name),
 		datasets: [
@@ -130,10 +136,11 @@ export default function Reports() {
 		],
 	};
 
+	// Handle report download in CSV or PDF format
 	const downloadReport = async (reportFormat: "csv" | "pdf") => {
 		try {
 			if (reportFormat === "csv") {
-				// Prepare CSV data with proper escaping for commas and quotes
+				// Generate and download CSV file
 				const csvContent = [
 					["Date", "Company", "Type", "Notes"],
 					...filteredCommunications.map((comm) => [
@@ -164,6 +171,7 @@ export default function Reports() {
 				URL.revokeObjectURL(url);
 				showToast.success("CSV report downloaded successfully");
 			} else {
+				// Generate and download PDF file
 				const reportElement = document.getElementById("report-content");
 				if (!reportElement) {
 					showToast.error("Could not find report content");
@@ -176,6 +184,7 @@ export default function Reports() {
 					// Wait for charts to render
 					await new Promise((resolve) => setTimeout(resolve, 1000));
 
+					// Convert HTML content to canvas
 					const canvas = await html2canvas(reportElement, {
 						scale: 2,
 						logging: false,
@@ -188,7 +197,7 @@ export default function Reports() {
 
 					const imgData = canvas.toDataURL("image/png");
 
-					// A4 dimensions in mm
+					// Initialize PDF with A4 dimensions
 					const pdf = new jsPDF({
 						orientation: "portrait",
 						unit: "mm",
@@ -204,11 +213,11 @@ export default function Reports() {
 					let heightLeft = imgHeight;
 					let position = 0;
 
-					// First page
+					// Add first page
 					pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
 					heightLeft -= pageHeight;
 
-					// Additional pages if needed
+					// Add additional pages if needed
 					while (heightLeft >= 0) {
 						position = heightLeft - imgHeight;
 						pdf.addPage();
@@ -231,6 +240,7 @@ export default function Reports() {
 		}
 	};
 
+	// Helper function to get style for communication type
 	function getTypeStyle(type: CommunicationType) {
 		return styles[type] || styles.default;
 	}
@@ -401,7 +411,7 @@ export default function Reports() {
 					</div>
 				</div>
 
-				{/* Charts */}
+				{/* Charts Section */}
 				<div className="grid gap-6 lg:grid-cols-3">
 					<div className="bg-white rounded-xl shadow-soft p-6">
 						<h3 className="text-lg font-semibold text-gray-900 mb-6">
@@ -450,7 +460,7 @@ export default function Reports() {
 					</div>
 				</div>
 
-				{/* Enhanced Activity Log */}
+				{/* Activity Log Section */}
 				<div className="bg-white rounded-xl shadow-soft overflow-hidden">
 					<div className="p-6 border-b border-gray-100">
 						<div className="flex items-center justify-between">
@@ -468,7 +478,7 @@ export default function Reports() {
 						</div>
 					</div>
 
-					{/* Enhanced Table */}
+					{/* Communications Table */}
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-200">
 							<thead>
@@ -488,6 +498,7 @@ export default function Reports() {
 								</tr>
 							</thead>
 							<tbody className="bg-white divide-y divide-gray-200">
+								{/* Sort communications by date (newest first) and render each row */}
 								{filteredCommunications
 									.sort(
 										(a, b) =>

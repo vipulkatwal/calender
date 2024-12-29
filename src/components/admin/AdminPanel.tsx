@@ -7,23 +7,17 @@ import {
 	ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 
-// const tabVariants = {
-// 	selected: {
-// 		backgroundColor: "rgb(255, 255, 255)",
-// 		color: "rgb(17, 24, 39)",
-// 		boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-// 	},
-// 	notSelected: {
-// 		backgroundColor: "transparent",
-// 		color: "rgb(107, 114, 128)",
-// 	},
-// };
-
+/**
+ * AdminPanel component that provides an interface for managing companies and communication methods
+ * Features animated tab switching and responsive design
+ */
 export default function AdminPanel() {
+	// Track which tab is currently active
 	const [activeTab, setActiveTab] = useState<"companies" | "methods">(
 		"companies"
 	);
 
+	// Define tab configuration including icons, labels and descriptions
 	const tabs = [
 		{
 			key: "companies",
@@ -41,12 +35,14 @@ export default function AdminPanel() {
 
 	return (
 		<div className="space-y-8">
+			{/* Header section with gradient background */}
 			<div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl shadow-soft p-8 text-white">
 				<h1 className="text-3xl font-bold">Admin Panel</h1>
 				<p className="mt-2 text-primary-100">
 					Configure and manage system settings
 				</p>
 
+				{/* Tab navigation buttons */}
 				<div className="mt-8 flex flex-col sm:flex-row gap-4">
 					{tabs.map((tab) => {
 						const Icon = tab.icon;
@@ -64,6 +60,7 @@ export default function AdminPanel() {
 								whileTap={{ scale: 0.98 }}
 							>
 								<div className="flex items-center gap-3">
+									{/* Tab icon with conditional styling */}
 									<div
 										className={`p-2 rounded-lg ${
 											isActive ? "bg-primary-100" : "bg-white/10"
@@ -75,6 +72,7 @@ export default function AdminPanel() {
 											}`}
 										/>
 									</div>
+									{/* Tab content */}
 									<div>
 										<h3
 											className={`font-semibold ${
@@ -98,6 +96,7 @@ export default function AdminPanel() {
 				</div>
 			</div>
 
+			{/* Content area with animated transitions between tabs */}
 			<AnimatePresence mode="wait">
 				<motion.div
 					key={activeTab}

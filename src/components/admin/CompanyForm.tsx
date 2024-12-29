@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { Company } from "../../types";
 
+// Props interface for the CompanyForm component
 interface CompanyFormProps {
 	initialData?: Partial<Company>;
 	onSubmit: (data: Partial<Company>) => void;
 	onCancel: () => void;
 }
 
+/**
+ * CompanyForm component for creating and editing company information
+ * Handles form state and submission for company data
+ */
 export default function CompanyForm({
 	initialData,
 	onSubmit,
 	onCancel,
 }: CompanyFormProps) {
+	// Initialize form data with initial values or defaults
 	const [formData, setFormData] = useState<Partial<Company>>(
 		initialData || {
 			name: "",
@@ -24,14 +30,17 @@ export default function CompanyForm({
 		}
 	);
 
+	// State for managing new email and phone number inputs
 	const [newEmail, setNewEmail] = useState("");
 	const [newPhone, setNewPhone] = useState("");
 
+	// Handle form submission
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onSubmit(formData);
 	};
 
+	// Add new email to the emails array if it doesn't already exist
 	const addEmail = () => {
 		if (newEmail && !formData.emails?.includes(newEmail)) {
 			setFormData({
@@ -42,6 +51,7 @@ export default function CompanyForm({
 		}
 	};
 
+	// Remove specified email from the emails array
 	const removeEmail = (email: string) => {
 		setFormData({
 			...formData,
@@ -49,6 +59,7 @@ export default function CompanyForm({
 		});
 	};
 
+	// Add new phone number to the phoneNumbers array if it doesn't already exist
 	const addPhone = () => {
 		if (newPhone && !formData.phoneNumbers?.includes(newPhone)) {
 			setFormData({
@@ -59,6 +70,7 @@ export default function CompanyForm({
 		}
 	};
 
+	// Remove specified phone number from the phoneNumbers array
 	const removePhone = (phone: string) => {
 		setFormData({
 			...formData,
@@ -68,6 +80,7 @@ export default function CompanyForm({
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
+			{/* Company name input field */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">Name</label>
 				<input
@@ -79,6 +92,7 @@ export default function CompanyForm({
 				/>
 			</div>
 
+			{/* Company location input field */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Location
@@ -94,6 +108,7 @@ export default function CompanyForm({
 				/>
 			</div>
 
+			{/* LinkedIn profile URL input field */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					LinkedIn Profile
@@ -109,6 +124,7 @@ export default function CompanyForm({
 				/>
 			</div>
 
+			{/* Email management section */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Emails
@@ -128,6 +144,7 @@ export default function CompanyForm({
 						Add
 					</button>
 				</div>
+				{/* Display list of added emails */}
 				<div className="mt-2 flex flex-wrap gap-2">
 					{formData.emails?.map((email) => (
 						<span
@@ -147,6 +164,7 @@ export default function CompanyForm({
 				</div>
 			</div>
 
+			{/* Phone numbers management section */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Phone Numbers
@@ -166,6 +184,7 @@ export default function CompanyForm({
 						Add
 					</button>
 				</div>
+				{/* Display list of added phone numbers */}
 				<div className="mt-2 flex flex-wrap gap-2">
 					{formData.phoneNumbers?.map((phone) => (
 						<span
@@ -185,6 +204,7 @@ export default function CompanyForm({
 				</div>
 			</div>
 
+			{/* Comments textarea field */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Comments
@@ -199,6 +219,7 @@ export default function CompanyForm({
 				/>
 			</div>
 
+			{/* Communication periodicity input field */}
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
 					Communication Periodicity (days)
@@ -218,6 +239,7 @@ export default function CompanyForm({
 				/>
 			</div>
 
+			{/* Form action buttons */}
 			<div className="flex justify-end gap-3">
 				<button
 					type="button"

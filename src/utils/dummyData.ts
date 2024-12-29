@@ -1,6 +1,7 @@
 import { Company, Communication, CommunicationType } from "../types";
 import { subDays } from "date-fns";
 
+// Interface for notification objects used throughout the application
 export interface Notification {
 	id: string;
 	type: "overdue" | "due";
@@ -11,6 +12,7 @@ export interface Notification {
 	createdAt: string;
 }
 
+// Sample company data with realistic business information
 const companies: Company[] = [
 	{
 		id: "1",
@@ -108,6 +110,7 @@ const companies: Company[] = [
 	},
 ];
 
+// Available communication methods with their properties and sequence
 const communicationMethods = [
 	{
 		id: "1",
@@ -146,6 +149,7 @@ const communicationMethods = [
 	},
 ];
 
+// Generate random communication history for each company
 const generateCommunications = (): Communication[] => {
 	const communications: Communication[] = [];
 	const now = new Date();
@@ -154,6 +158,7 @@ const generateCommunications = (): Communication[] => {
 		// Generate random number of past communications (3-8)
 		const numPastComms = Math.floor(Math.random() * 6) + 3;
 
+		// Create past communications with random dates
 		for (let i = 1; i <= numPastComms; i++) {
 			// Generate random date within last 90 days
 			const randomDays = Math.floor(Math.random() * 90);
@@ -170,7 +175,7 @@ const generateCommunications = (): Communication[] => {
 			});
 		}
 
-		// Randomly add due today communications (30% chance)
+		// Add communications due today (30% chance)
 		if (Math.random() < 0.3) {
 			communications.push({
 				id: crypto.randomUUID(),
@@ -181,7 +186,7 @@ const generateCommunications = (): Communication[] => {
 			});
 		}
 
-		// Randomly add overdue communications (40% chance)
+		// Add overdue communications (40% chance)
 		if (Math.random() < 0.4) {
 			const overdueDays = Math.floor(Math.random() * 15) + 1; // 1-15 days overdue
 			communications.push({
@@ -193,7 +198,7 @@ const generateCommunications = (): Communication[] => {
 			});
 		}
 
-		// Update company's lastCommunication
+		// Update company's lastCommunication with most recent communication
 		const companyComms = communications
 			.filter((c) => c.companyId === company.id)
 			.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -206,11 +211,13 @@ const generateCommunications = (): Communication[] => {
 	return communications;
 };
 
+// Generate random notifications for overdue and due communications
 const generateNotifications = (): Notification[] => {
 	const notifications: Notification[] = [];
 	const now = new Date();
 
 	companies.forEach((company) => {
+		// 30% chance of generating overdue notification
 		if (Math.random() > 0.7) {
 			notifications.push({
 				id: crypto.randomUUID(),
@@ -223,6 +230,7 @@ const generateNotifications = (): Notification[] => {
 			});
 		}
 
+		// 20% chance of generating due today notification
 		if (Math.random() > 0.8) {
 			notifications.push({
 				id: crypto.randomUUID(),
@@ -239,6 +247,7 @@ const generateNotifications = (): Notification[] => {
 	return notifications;
 };
 
+// Export all dummy data for use in development
 export const dummyData = {
 	companies,
 	communications: generateCommunications(),

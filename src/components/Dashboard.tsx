@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -8,14 +9,17 @@ import CommunicationModal from "./communications/CommunicationModal";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Dashboard() {
+	// State for managing company selections, modal visibility and highlight preferences
 	const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 	const [showCommunicationModal, setShowCommunicationModal] = useState(false);
 	const [highlightsDisabled, setHighlightsDisabled] = useState<string[]>([]);
 
+	// Get communications data from Redux store
 	const communications = useSelector(
 		(state: RootState) => state.communications.communications
 	);
 
+	// Get communication-related utilities from custom hook
 	const {
 		lastFiveCommunications,
 		getNextCommunicationDate,
@@ -23,6 +27,7 @@ export default function Dashboard() {
 		companies,
 	} = useCommunications();
 
+	// Memoized component for rendering communication badges
 	const CommunicationBadges = useMemo(() => {
 		return ({ companyId }: { companyId: string }) => (
 			<div className="flex flex-wrap gap-2">
@@ -33,6 +38,7 @@ export default function Dashboard() {
 		);
 	}, [communications, lastFiveCommunications]);
 
+	// Determine row highlight color based on communication status
 	const getRowHighlight = (companyId: string) => {
 		if (highlightsDisabled.includes(companyId)) return "";
 
@@ -47,6 +53,7 @@ export default function Dashboard() {
 		}
 	};
 
+	// Toggle company selection for bulk actions
 	const toggleCompanySelection = (companyId: string) => {
 		setSelectedCompanies((prev) =>
 			prev.includes(companyId)
@@ -55,6 +62,7 @@ export default function Dashboard() {
 		);
 	};
 
+	// Toggle highlight visibility for specific companies
 	const toggleHighlight = (companyId: string) => {
 		setHighlightsDisabled((prev) =>
 			prev.includes(companyId)
@@ -63,6 +71,7 @@ export default function Dashboard() {
 		);
 	};
 
+	// Define color schemes for different communication types
 	function getEventColor(type: string) {
 		const colors: Record<
 			string,
@@ -98,6 +107,7 @@ export default function Dashboard() {
 		return colors[type as keyof typeof colors] || colors.Other;
 	}
 
+	// Component for rendering individual communication badges
 	const CommunicationBadge = ({ comm }: { comm: any }) => {
 		const colors = getEventColor(comm.type);
 		return (
@@ -128,7 +138,7 @@ export default function Dashboard() {
 					<div className="absolute inset-0 bg-[linear-gradient(30deg,var(--primary)_12%,transparent_12.5%,transparent_87%,var(--primary)_87.5%,var(--primary)),linear-gradient(150deg,var(--primary)_12%,transparent_12.5%,transparent_87%,var(--primary)_87.5%,var(--primary)),linear-gradient(30deg,var(--primary)_12%,transparent_12.5%,transparent_87%,var(--primary)_87.5%,var(--primary)),linear-gradient(150deg,var(--primary)_12%,transparent_12.5%,transparent_87%,var(--primary)_87.5%,var(--primary)),linear-gradient(60deg,var(--primary-dark)_25%,transparent_25.5%,transparent_75%,var(--primary-dark)_75%,var(--primary-dark)),linear-gradient(60deg,var(--primary-dark)_25%,transparent_25.5%,transparent_75%,var(--primary-dark)_75%,var(--primary-dark))] bg-[length:80px_140px] opacity-10"></div>
 				</div>
 
-				{/* Content */}
+				{/* Header Content */}
 				<div className="relative">
 					<div className="sm:flex sm:items-center sm:justify-between">
 						<div className="text-white">
@@ -174,7 +184,7 @@ export default function Dashboard() {
 				</div>
 			</div>
 
-			{/* Enhanced Stats Grid */}
+			{/* Stats Grid - Shows key metrics */}
 			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{[
 					{
@@ -267,7 +277,7 @@ export default function Dashboard() {
 				))}
 			</div>
 
-			{/* Enhanced Table */}
+			{/* Companies Table - Main data display */}
 			<div className="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
 				<div className="p-6 border-b border-gray-100">
 					<h2 className="text-lg font-semibold text-gray-900">
@@ -368,6 +378,7 @@ export default function Dashboard() {
 				</div>
 			</div>
 
+			{/* Communication Modal for logging new communications */}
 			<CommunicationModal
 				isOpen={showCommunicationModal}
 				onClose={() => {
