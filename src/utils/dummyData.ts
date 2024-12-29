@@ -1,5 +1,5 @@
 import { Company, Communication, CommunicationType } from "../types";
-import { subDays, addDays } from "date-fns";
+import { subDays } from "date-fns";
 
 export interface Notification {
 	id: string;
@@ -151,50 +151,55 @@ const generateCommunications = (): Communication[] => {
 	const now = new Date();
 
 	companies.forEach((company) => {
-		// Generate past communications
-		for (let i = 1; i <= 10; i++) {
+		// Generate random number of past communications (3-8)
+		const numPastComms = Math.floor(Math.random() * 6) + 3;
+
+		for (let i = 1; i <= numPastComms; i++) {
+			// Generate random date within last 90 days
+			const randomDays = Math.floor(Math.random() * 90);
+			const commDate = subDays(now, randomDays);
+
 			communications.push({
 				id: crypto.randomUUID(),
 				companyId: company.id,
 				type: Object.values(CommunicationType)[
 					Math.floor(Math.random() * Object.values(CommunicationType).length)
 				],
-				date: subDays(now, i * company.communicationPeriodicity).toISOString(),
-				notes: `Regular check-in #${i} with ${company.name}`,
+				date: commDate.toISOString(),
+				notes: `Communication with ${company.name}`,
 			});
 		}
 
-		// Add some overdue communications
-		if (Math.random() > 0.5) {
-			communications.push({
-				id: crypto.randomUUID(),
-				companyId: company.id,
-				type: CommunicationType.EMAIL,
-				date: subDays(now, 45).toISOString(),
-				notes: "Follow-up needed",
-			});
-		}
-
-		// Add some due today communications
-		if (Math.random() > 0.7) {
+		// Randomly add due today communications (30% chance)
+		if (Math.random() < 0.3) {
 			communications.push({
 				id: crypto.randomUUID(),
 				companyId: company.id,
 				type: CommunicationType.LINKEDIN_POST,
 				date: now.toISOString(),
-				notes: "Scheduled for today",
+				notes: "Due today",
 			});
 		}
 
-		// Add some future communications
-		if (Math.random() > 0.6) {
+		// Randomly add overdue communications (40% chance)
+		if (Math.random() < 0.4) {
+			const overdueDays = Math.floor(Math.random() * 15) + 1; // 1-15 days overdue
 			communications.push({
 				id: crypto.randomUUID(),
 				companyId: company.id,
-				type: CommunicationType.PHONE_CALL,
-				date: addDays(now, 7).toISOString(),
-				notes: "Scheduled follow-up",
+				type: CommunicationType.EMAIL,
+				date: subDays(now, overdueDays).toISOString(),
+				notes: "Overdue communication",
 			});
+		}
+
+		// Update company's lastCommunication
+		const companyComms = communications
+			.filter((c) => c.companyId === company.id)
+			.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+		if (companyComms.length > 0) {
+			company.lastCommunication = new Date(companyComms[0].date);
 		}
 	});
 

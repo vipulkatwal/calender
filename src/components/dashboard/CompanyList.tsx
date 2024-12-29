@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 import CommunicationModal from "../communications/CommunicationModal";
 import CommunicationHistory from "./CommunicationHistory";
 import { Company } from "../../types";
@@ -31,9 +31,8 @@ export default function CompanyList() {
 
 		return {
 			date: nextDate,
-			isOverdue: nextDate < new Date(),
-			isDueToday:
-				format(nextDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd"),
+			isOverdue: nextDate < new Date() && !isToday(nextDate),
+			isDueToday: isToday(nextDate),
 		};
 	};
 
