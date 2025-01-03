@@ -5,7 +5,6 @@ A modern React application for managing and tracking company communications with
 
 ## ✅ Features:
 
-![Calender.io](./public/dashboard.png)
 
 ### 1. Dashboard 📈
 
@@ -15,8 +14,8 @@ A modern React application for managing and tracking company communications with
 - Toggle highlighting for overdue/due communications
 - Bulk communication logging for multiple companies
 
+![Calender.io](./public/dashboard.png)
 
-![Calender.io](./public/calendar.png)
 
 ### 2. Calendar View 📅
 
@@ -25,7 +24,7 @@ A modern React application for managing and tracking company communications with
 - Click-to-schedule functionality
 - Visual indicators for communication density
 
-![Calender.io](./public/reports.png)
+![Calender.io](./public/calendar.png)
 
 ### 3. Communication Management 💬
 
@@ -39,7 +38,7 @@ A modern React application for managing and tracking company communications with
 - Communication periodicity tracking
 - Historical communication records
 
-![Calender.io](./public/notifications.png)
+![Calender.io](./public/reports.png)
 
 ### 4. Notification System 🔔
 
@@ -52,7 +51,7 @@ A modern React application for managing and tracking company communications with
 - Notification filtering
 
 
-![Calender.io](./public/admin.png)
+![Calender.io](./public/notifications.png)
 
 ### 5. Admin Features ⚙️
 
@@ -61,6 +60,7 @@ A modern React application for managing and tracking company communications with
 - User role management
 - System settings
 
+![Calender.io](./public/admin.png)
 ## 🛠️ Tech Stack
 
 ### Core Technologies 🎯
