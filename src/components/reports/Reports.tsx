@@ -20,6 +20,7 @@ import { showToast } from "../common/Toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import { DocumentIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 
 // Register ChartJS components
 ChartJS.register(
@@ -250,120 +251,87 @@ export default function Reports() {
 			{/* Enhanced Header with Gradient Background */}
 			<div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl shadow-soft p-8 text-white">
 				<div className="sm:flex sm:items-center sm:justify-between">
-					<div>
-						<h1 className="text-3xl font-bold">Reports & Analytics</h1>
-						<p className="mt-2 text-primary-100">
-							Comprehensive insights into your communication patterns
-						</p>
-					</div>
-					<div className="mt-4 sm:mt-0 flex flex-col sm:flex-row items-end gap-4">
-						<div className="relative">
-							<input
-								type="month"
-								value={selectedMonth}
-								onChange={(e) => setSelectedMonth(e.target.value)}
-								className="input-field pr-10 bg-white/10 border-white/20 text-white placeholder-white/60"
-							/>
-							<span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60">
-								<svg
-									className="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-									/>
-								</svg>
-							</span>
+					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+						{/* Title section */}
+						<div>
+							<h1 className="text-3xl font-bold">Reports & Analytics</h1>
+							<p className="mt-2 text-blue-100">
+								Comprehensive insights into your communication patterns
+							</p>
 						</div>
-						<div className="flex gap-2">
-							<motion.button
-								whileHover={{ scale: 1.02 }}
-								whileTap={{ scale: 0.98 }}
-								onClick={() => downloadReport("csv")}
-								className="btn-secondary flex items-center gap-2"
-							>
-								<svg
-									className="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-									/>
-								</svg>
-								CSV
-							</motion.button>
-							<motion.button
-								whileHover={{ scale: 1.02 }}
-								whileTap={{ scale: 0.98 }}
-								onClick={() => downloadReport("pdf")}
-								className="btn-primary flex items-center gap-2"
-							>
-								<svg
-									className="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-									/>
-								</svg>
-								PDF
-							</motion.button>
-						</div>
-					</div>
-				</div>
 
-				{/* Enhanced Filter Section */}
-				<div className="mt-6 p-4 bg-white/10 rounded-lg backdrop-blur-sm">
-					<div className="flex flex-wrap items-center gap-4">
-						<div className="flex-1 min-w-[200px]">
-							<label className="text-sm font-medium text-white/80 mb-1 block">
-								Company Filter
-							</label>
-							<select
-								value={selectedCompany}
-								onChange={(e) => setSelectedCompany(e.target.value)}
-								className="input-field bg-white/10 border-white/20 text-white w-full appearance-none"
-								style={{
-									backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-									backgroundPosition: `right 0.5rem center`,
-									backgroundRepeat: "no-repeat",
-									backgroundSize: "1.5em 1.5em",
-									paddingRight: "2.5rem",
-								}}
-							>
-								<option value="all" className="bg-gray-800 text-white">
-									All Companies
-								</option>
-								{companies.map((company) => (
-									<option
-										key={company.id}
-										value={company.id}
-										className="bg-gray-800 text-white"
-									>
-										{company.name}
-									</option>
-								))}
-							</select>
+						{/* Controls section - responsive */}
+						<div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+							{/* Month selector */}
+							<div className="relative flex-1 sm:flex-none">
+								<input
+									type="month"
+									value={selectedMonth}
+									onChange={(e) => setSelectedMonth(e.target.value)}
+									className="w-full sm:w-auto px-4 py-2 rounded-lg bg-white text-gray-700"
+								/>
+							</div>
+
+							{/* Export buttons */}
+							<div className="flex gap-2">
+								<button
+									onClick={() => downloadReport("csv")}
+									className="px-3 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white
+												hover:bg-white/30 transition-colors flex items-center gap-1"
+								>
+									<DocumentIcon className="h-5 w-5" />
+									CSV
+								</button>
+								<button
+									onClick={() => downloadReport("pdf")}
+									className="px-3 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white
+												hover:bg-white/30 transition-colors flex items-center gap-1"
+								>
+									<DocumentTextIcon className="h-5 w-5" />
+									PDF
+								</button>
+							</div>
 						</div>
-						<div className="flex items-center gap-4 text-white/80">
-							<span className="text-sm">
-								Showing {filteredCommunications.length} communications
-							</span>
+					</div>
+
+					{/* Enhanced Filter Section */}
+					<div className="mt-6 p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+						<div className="flex flex-wrap items-center gap-4">
+							<div className="flex-1 min-w-[200px]">
+								<label className="text-sm font-medium text-white/80 mb-1 block">
+									Company Filter
+								</label>
+								<select
+									value={selectedCompany}
+									onChange={(e) => setSelectedCompany(e.target.value)}
+									className="input-field bg-white/10 border-white/20 text-white w-full appearance-none"
+									style={{
+										backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+										backgroundPosition: `right 0.5rem center`,
+										backgroundRepeat: "no-repeat",
+										backgroundSize: "1.5em 1.5em",
+										paddingRight: "2.5rem",
+									}}
+								>
+									<option value="all" className="bg-gray-800 text-white">
+										All Companies
+									</option>
+									{companies.map((company) => (
+										<option
+											key={company.id}
+											value={company.id}
+											className="bg-gray-800 text-white"
+										>
+											{company.name}
+										</option>
+									))}
+								</select>
+							</div>
+							<div className="flex items-center gap-4 text-white/80">
+								<span className="text-sm">
+									Showing {filteredCommunications.length} communications
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
