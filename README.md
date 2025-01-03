@@ -54,14 +54,14 @@ A modern React application for managing and tracking company communications with
 
 ### Core Technologies 🎯
 
-- **React 18** ⚛️ - UI library
-- **TypeScript** 📘 - Type safety and better developer experience
-- **Vite** ⚡ - Build tool and development server
+- **React 18** - UI library
+- **TypeScript** - Type safety and better developer experience
+- **Vite** - Build tool and development server
 
 ### State Management 🔄
 
-- **Redux Toolkit** 🔄 - Centralized state management
-- **React Redux** ⚛️ - React bindings for Redux
+- **Redux Toolkit** - Centralized state management
+- **React Redux** - React bindings for Redux
 
 ### UI Components & Styling 🎨
 
@@ -141,10 +141,10 @@ npm run build
 ## 🤝 Contributing
 
 1. Fork the repository 🍴
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`) 🌿
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`) ✨
-4. Push to the branch (`git push origin feature/AmazingFeature`) 🚀
-5. Open a Pull Request 🎉
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
