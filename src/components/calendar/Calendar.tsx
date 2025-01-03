@@ -108,17 +108,21 @@ export default function Calendar() {
 						new Date(lastComm.date),
 						company.communicationPeriodicity
 					);
+
+					// Check if the communication is due today
+					const isDueToday = format(nextDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
+
 					return {
 						id: `upcoming-${company.id}`,
-						title: `${company.name} - Due`,
+						title: `${company.name} - ${isDueToday ? 'Due' : lastComm.type}`,
 						start: nextDate,
-						backgroundColor: "#FEF3C7", // amber-100
-						borderColor: "#F59E0B", // amber-500
-						textColor: "#92400E", // amber-800
+						backgroundColor: isDueToday ? "#FEF3C7" : getEventColor(lastComm.type).background,
+						borderColor: isDueToday ? "#F59E0B" : getEventColor(lastComm.type).border,
+						textColor: isDueToday ? "#92400E" : "#FFFFFF",
 						extendedProps: {
 							isUpcoming: true,
 							companyId: company.id,
-							type: "Due",
+							type: isDueToday ? 'Due' : lastComm.type,
 						},
 					};
 				}

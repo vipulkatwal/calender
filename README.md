@@ -8,27 +8,27 @@ A modern React application for managing and tracking company communications with
 
 ### 1. Dashboard 📈
 
-- 🏢 Company overview with communication history
-- ⚡ Real-time status indicators for due and overdue communications
-- 📝 Last five communications display for each company
-- 🔦 Toggle highlighting for overdue/due communications
-- 📨 Bulk communication logging for multiple companies
+- Company overview with communication history
+- Real-time status indicators for due and overdue communications
+- Last five communications display for each company
+- Toggle highlighting for overdue/due communications
+- Bulk communication logging for multiple companies
 
 ### 2. Calendar View 📅
 
-- 🎯 Interactive calendar interface using FullCalendar
-- 🎨 Color-coded communication types
-- 🖱️ Click-to-schedule functionality
-- 📊 Visual indicators for communication density
+- Interactive calendar interface using FullCalendar
+- Color-coded communication types
+- Click-to-schedule functionality
+- Visual indicators for communication density
 
 ### 3. Communication Management 💬
 
 - 📱 Multiple communication types support:
-  - 💼 LinkedIn Posts
-  - 💌 LinkedIn Messages
-  - 📧 Emails
-  - 📞 Phone Calls
-  - 🔗 Other communications
+  - LinkedIn Posts
+  - LinkedIn Messages
+  - Emails
+  - Phone Calls
+  - Other communications
 - 📝 Detailed communication logging
 - ⏱️ Communication periodicity tracking
 - 📚 Historical communication records
@@ -36,19 +36,19 @@ A modern React application for managing and tracking company communications with
 ### 4. Notification System 🔔
 
 - ⚡ Real-time notifications for:
-  - ⏰ Overdue communications
-  - 📅 Due today communications
-  - 🔜 Upcoming communications
+  - Overdue communications
+  - Due today communications
+  - Upcoming communications
 - 📱 Interactive notification panel
 - ✅ Mark as read functionality
 - 🔍 Notification filtering
 
 ### 5. Admin Features ⚙️
 
-- 🏢 Company management
-- 🛠️ Communication method configuration
-- 👥 User role management
-- ⚙️ System settings
+- Company management
+- Communication method configuration
+- User role management
+- System settings
 
 ## 🛠️ Tech Stack
 
@@ -65,30 +65,30 @@ A modern React application for managing and tracking company communications with
 
 ### UI Components & Styling 🎨
 
-- **Tailwind CSS** 💨 - Utility-first CSS framework
-- **Headless UI** 🎭 - Unstyled, accessible UI components
-- **Framer Motion** 🎬 - Animation library
-- **Hero Icons** 🦸‍♂️ - SVG icon collection
-- **React Loading Skeleton** ⌛ - Loading state placeholders
+- **Tailwind CSS** - Utility-first CSS framework
+- **Headless UI** - Unstyled, accessible UI components
+- **Framer Motion** - Animation library
+- **Hero Icons** - SVG icon collection
+- **React Loading Skeleton** - Loading state placeholders
 
 ### Calendar & Date Handling 📅
 
-- **FullCalendar** 📅 - Calendar component
-- **date-fns** ⏰ - Date manipulation library
+- **FullCalendar** - Calendar component
+- **date-fns** - Date manipulation library
 
 ### Notifications 🔔
 
-- **React Toastify** 🍞 - Toast notifications
+- **React Toastify** - Toast notifications
 
 ### Charts & Reports 📊
 
-- **Chart.js** 📈 - Data visualization
-- **React ChartJS 2** 📊 - React wrapper for Chart.js
+- **Chart.js** - Data visualization
+- **React ChartJS 2** - React wrapper for Chart.js
 
 ### PDF Generation 📄
 
-- **jsPDF** 📑 - PDF document generation
-- **html2canvas** 🖼️ - HTML to canvas conversion
+- **jsPDF** - PDF document generation
+- **html2canvas** - HTML to canvas conversion
 
 ## 📁 Project Structure
 
