@@ -23,25 +23,25 @@ A modern React application for managing and tracking company communications with
 
 ### 3. Communication Management 💬
 
-- 📱 Multiple communication types support:
+- Multiple communication types support:
   - LinkedIn Posts
   - LinkedIn Messages
   - Emails
   - Phone Calls
   - Other communications
-- 📝 Detailed communication logging
-- ⏱️ Communication periodicity tracking
-- 📚 Historical communication records
+- Detailed communication logging
+- Communication periodicity tracking
+- Historical communication records
 
 ### 4. Notification System 🔔
 
-- ⚡ Real-time notifications for:
+- Real-time notifications for:
   - Overdue communications
   - Due today communications
   - Upcoming communications
-- 📱 Interactive notification panel
-- ✅ Mark as read functionality
-- 🔍 Notification filtering
+- Interactive notification panel
+- Mark as read functionality
+- Notification filtering
 
 ### 5. Admin Features ⚙️
 
